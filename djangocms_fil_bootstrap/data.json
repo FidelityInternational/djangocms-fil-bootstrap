@@ -1,0 +1,338 @@
+{
+    "email_domain": "test.com",
+    "users": [
+        {
+            "username": "admin",
+            "is_superuser": true
+        },
+        "test",
+        "test2",
+        "test3",
+        "moderator",
+        "reviewer",
+        "artworker"
+    ],
+    "groups": {
+        "group1": {
+            "name": "Group 1",
+            "users": [
+                "test2",
+                "test3"
+            ]
+        },
+        "moderator": {
+            "name": "Moderator",
+            "users": [
+                "moderator"
+            ]
+        },
+        "reviewer": {
+            "name": "Reviewer",
+            "users": [
+                "reviewer"
+            ]
+        },
+        "artworker": {
+            "name": "Artworker",
+            "users": [
+                "artworker"
+            ]
+        }
+    },
+    "roles": {
+        "role1": {
+            "name": "Role 1",
+            "user": "test"
+        },
+        "role2": {
+            "name": "Role 2",
+            "user": "test2"
+        },
+        "role3": {
+            "name": "Role 3",
+            "group": "group1"
+        },
+        "moderator": {
+            "name": "Moderator",
+            "group": "moderator"
+        },
+        "reviewer": {
+            "name": "Reviewer",
+            "group": "reviewer"
+        },
+        "artworker": {
+            "name": "Artworker",
+            "group": "artworker"
+        }
+    },
+    "permission_aliases": {
+        "change_moderationcollection_author": ["can_change_author", "djangocms_moderation", "moderationcollection"],
+        "add_moderationcollection": ["add_moderationcollection", "djangocms_moderation", "moderationcollection"],
+        "change_moderationcollection": ["change_moderationcollection", "djangocms_moderation", "moderationcollection"],
+        "add_moderationrequest": ["add_moderationrequest", "djangocms_moderation", "moderationrequest"],
+        "change_moderationrequest": ["change_moderationrequest", "djangocms_moderation", "moderationrequest"],
+        "add_moderationrequestaction": ["add_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
+        "change_moderationrequestaction": ["change_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
+        "add_collectioncomment": ["add_collectioncomment", "djangocms_moderation", "collectioncomment"],
+        "change_collectioncomment": ["change_collectioncomment", "djangocms_moderation", "collectioncomment"],
+        "use_structure": ["use_structure", "cms", "placeholder"],
+        "view_page": ["view_page", "cms", "page"],
+        "change_page": ["change_page", "cms", "page"]
+    },
+    "permissions": {
+        "groups": {
+
+        },
+        "users": {
+            "test": [
+                "change_moderationcollection_author",
+                "add_moderationcollection",
+                "change_moderationcollection",
+                "add_moderationrequest",
+                "change_moderationrequest"
+            ],
+            "moderator": [
+                "change_moderationcollection_author",
+                "add_moderationcollection",
+                "change_moderationcollection",
+                "add_moderationrequest",
+                "change_moderationrequest",
+                ["delete_moderationrequest", "djangocms_moderation", "moderationrequest"],
+                "add_moderationrequestaction",
+                "change_moderationrequestaction",
+                ["delete_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
+                ["add_workflow", "djangocms_moderation", "workflow"],
+                ["change_workflow", "djangocms_moderation", "workflow"],
+                ["delete_workflow", "djangocms_moderation", "workflow"],
+                "add_collectioncomment",
+                "change_collectioncomment",
+                ["delete_collectioncomment", "djangocms_moderation", "collectioncomment"],
+                ["add_confirmationformsubmission", "djangocms_moderation", "confirmationformsubmission"],
+                ["change_confirmationformsubmission", "djangocms_moderation", "confirmationformsubmission"],
+                ["delete_confirmationformsubmission", "djangocms_moderation", "confirmationformsubmission"],
+                ["add_moderationform", "djangocms_moderation", "moderationform"],
+                ["change_moderationform", "djangocms_moderation", "moderationform"],
+                ["delete_moderationform", "djangocms_moderation", "moderationform"],
+                "use_structure",
+                ["change_staticplaceholder", "cms", "staticplaceholder"],
+                ["delete_staticplaceholder", "cms", "staticplaceholder"],
+                ["add_cms_plugin", "cms", "cmsplugin"],
+                ["change_cms_plugin", "cms", "cmsplugin"],
+                ["delete_cms_plugin", "cms", "cmsplugin"],
+                ["add_page", "cms", "page"],
+                ["delete_page", "cms", "page"],
+                "view_page",
+                "change_page",
+                ["publish_page", "cms", "page"],
+                ["edit_static_placeholder", "cms", "page"],
+                ["add_aliaspluginmodel", "cms", "aliaspluginmodel"],
+                ["change_aliaspluginmodel", "cms", "aliaspluginmodel"],
+                ["delete_aliaspluginmodel", "cms", "aliaspluginmodel"],
+                ["add_text", "djangocms_text_ckeditor", "text"],
+                ["change_text", "djangocms_text_ckeditor", "text"],
+                ["delete_text", "djangocms_text_ckeditor", "text"],
+                ["add_textareafieldplugin", "aldryn_forms", "textareafieldplugin"],
+                ["change_textareafieldplugin", "aldryn_forms", "textareafieldplugin"],
+                ["delete_textareafieldplugin", "aldryn_forms", "textareafieldplugin"],
+                ["add_image", "filer", "image"],
+                ["change_image", "filer", "image"],
+                ["delete_image", "filer", "image"],
+                ["add_url", "djangocms_url_manager", "url"],
+                ["change_url", "djangocms_url_manager", "url"],
+                ["delete_url", "djangocms_url_manager", "url"],
+                ["add_urloverride", "djangocms_url_manager", "urloverride"],
+                ["change_urloverride", "djangocms_url_manager", "urloverride"],
+                ["delete_urloverride", "djangocms_url_manager", "urloverride"],
+                ["add_linkplugin", "djangocms_url_manager", "linkplugin"],
+                ["change_linkplugin", "djangocms_url_manager", "linkplugin"],
+                ["delete_linkplugin", "djangocms_url_manager", "linkplugin"],
+                ["add_style", "djangocms_style", "style"],
+                ["change_style", "djangocms_style", "style"],
+                ["delete_style", "djangocms_style", "style"],
+                ["add_snippet", "djangocms_snippet", "snippet"],
+                ["change_snippet", "djangocms_snippet", "snippet"],
+                ["delete_snippet", "djangocms_snippet", "snippet"],
+                ["add_version", "djangocms_versioning", "version"],
+                ["change_version", "djangocms_versioning", "version"],
+                ["delete_version", "djangocms_versioning", "version"],
+                ["add_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
+                ["change_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
+                ["delete_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
+                ["add_versionlock", "djangocms_version_locking", "versionlock"],
+                ["change_versionlock", "djangocms_version_locking", "versionlock"],
+                ["delete_versionlock", "djangocms_version_locking", "versionlock"]
+            ],
+            "reviewer": [
+                "change_moderationcollection",
+                "change_moderationrequest",
+                "change_moderationrequestaction",
+                "add_collectioncomment",
+                "change_collectioncomment",
+                "use_structure",
+                "view_page",
+                "change_page"
+            ]
+        }
+    },
+    "workflows": {
+        "wf1": {
+            "name": "Workflow 1",
+            "is_default": true,
+            "steps": [
+                {
+                    "role": "role1",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "role2",
+                    "is_required": false,
+                    "order": 2
+                },
+                {
+                    "role": "role3",
+                    "is_required": true,
+                    "order": 3
+                }
+            ]
+        },
+        "wf2": {
+            "name": "Workflow 2",
+            "steps": [
+                {
+                    "role": "role1",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "role3",
+                    "is_required": true,
+                    "order": 2
+                }
+            ]
+        },
+        "wf3": {
+            "name": "Workflow 3",
+            "steps": [
+                {
+                    "role": "role1",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "role3",
+                    "is_required": false,
+                    "order": 2
+                }
+            ]
+        },
+        "wf4": {
+            "name": "NCO",
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                }
+            ]
+        }
+    },
+    "pages": {
+        "homepage": {
+            "title": "Home",
+            "template": "INHERIT",
+            "language": "en",
+            "created_by": "admin",
+            "publish": true,
+            "is_home": true,
+            "content": [
+                {
+                    "type": "TextPlugin",
+                    "body": "<h1>Welcome to django CMS!</h1><p>The easy-to-use and developer-friendly CMS</p>"
+                },
+                {
+                    "type": "MultiColumnPlugin",
+                    "children": [
+                        {
+                            "type": "ColumnPlugin",
+                            "width": "33%",
+                            "children": [
+                                {
+                                    "type": "TextPlugin",
+                                    "body": "<h2>A section</h2>\n<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>\n"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ColumnPlugin",
+                            "width": "33%",
+                            "children": [
+                                {
+                                    "type": "TextPlugin",
+                                    "body": "<h2>Another section</h2>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ColumnPlugin",
+                            "width": "33%",
+                            "children": [
+                                {
+                                    "type": "TextPlugin",
+                                    "body": "<h2>Third section</h2>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "page1": {
+            "title": "Page 1 by test",
+            "template": "INHERIT",
+            "language": "en",
+            "created_by": "test"
+        },
+        "page2": {
+            "title": "Page 2 by test2",
+            "template": "INHERIT",
+            "language": "en",
+            "created_by": "test2"
+        },
+        "page3": {
+            "title": "Page 3 by test3",
+            "template": "INHERIT",
+            "language": "en",
+            "created_by": "test3"
+        },
+        "page4": {
+            "title": "Page 4 by test",
+            "template": "INHERIT",
+            "language": "en",
+            "created_by": "test"
+        },
+        "page5": {
+            "title": "Page 5 by moderator",
+            "template": "INHERIT",
+            "language": "en",
+            "created_by": "moderator",
+            "assignments": [
+                {
+                    "user": "moderator",
+                    "can_view": true,
+                    "can_change": true
+                },
+                {
+                    "user": "reviewer",
+                    "can_view": true,
+                    "can_change": false
+                },
+                {
+                    "user": "artworker",
+                    "can_view": true,
+                    "can_change": true
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,4 @@
+{
+    "package-name": "djangocms-fil-bootstrap",
+    "installed-apps": ["djangocms_fil_bootstrap"]
+}
