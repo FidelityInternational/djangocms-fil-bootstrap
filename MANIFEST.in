@@ -1,0 +1,4 @@
+include LICENSE.txt
+include README.rst
+include djangocms_fil_bootstrap/data.json
+recursive-exclude * *.pyc
