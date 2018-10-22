@@ -9,7 +9,11 @@
         "test2",
         "test3",
         "moderator",
+        "moderator2",
+        "moderator3",
         "reviewer",
+        "reviewer2",
+        "reviewer3",
         "artworker"
     ],
     "groups": {
@@ -23,13 +27,17 @@
         "moderator": {
             "name": "Moderator",
             "users": [
-                "moderator"
+                "moderator",
+                "moderator2",
+                "moderator3"
             ]
         },
         "reviewer": {
             "name": "Reviewer",
             "users": [
-                "reviewer"
+                "reviewer",
+                "reviewer2",
+                "reviewer3"
             ]
         },
         "artworker": {
@@ -81,15 +89,15 @@
     },
     "permissions": {
         "groups": {
-
-        },
-        "users": {
-            "test": [
-                "change_moderationcollection_author",
-                "add_moderationcollection",
+            "reviewer": [
                 "change_moderationcollection",
-                "add_moderationrequest",
-                "change_moderationrequest"
+                "change_moderationrequest",
+                "change_moderationrequestaction",
+                "add_collectioncomment",
+                "change_collectioncomment",
+                "use_structure",
+                "view_page",
+                "change_page"
             ],
             "moderator": [
                 "change_moderationcollection_author",
@@ -161,16 +169,15 @@
                 ["add_versionlock", "djangocms_version_locking", "versionlock"],
                 ["change_versionlock", "djangocms_version_locking", "versionlock"],
                 ["delete_versionlock", "djangocms_version_locking", "versionlock"]
-            ],
-            "reviewer": [
+            ]
+        },
+        "users": {
+            "test": [
+                "change_moderationcollection_author",
+                "add_moderationcollection",
                 "change_moderationcollection",
-                "change_moderationrequest",
-                "change_moderationrequestaction",
-                "add_collectioncomment",
-                "change_collectioncomment",
-                "use_structure",
-                "view_page",
-                "change_page"
+                "add_moderationrequest",
+                "change_moderationrequest"
             ]
         }
     },

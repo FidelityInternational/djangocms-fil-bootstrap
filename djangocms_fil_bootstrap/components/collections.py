@@ -9,24 +9,24 @@ class Collections(Component):
 
     def parse(self):
         collection1 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["test"],
+            author=self.bootstrap.users["moderator"],
             name="Collection 1",
-            workflow=self.bootstrap.workflows["wf1"],
+            workflow=self.bootstrap.workflows["wf4"],
         )
         collection1.add_version(get_version(self.bootstrap.pages["page1"]))
         collection1.add_version(get_version(self.bootstrap.pages["page2"]))
 
         collection2 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["test2"],
+            author=self.bootstrap.users["moderator2"],
             name="Collection 2",
-            workflow=self.bootstrap.workflows["wf2"],
+            workflow=self.bootstrap.workflows["wf4"],
         )
         collection2.add_version(get_version(self.bootstrap.pages["page3"]))
         collection2.add_version(get_version(self.bootstrap.pages["page4"]))
 
         collection3 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["moderator"],
-            name="Collection for review",
+            author=self.bootstrap.users["moderator3"],
+            name="Collection 3",
             workflow=self.bootstrap.workflows["wf4"],
         )
         collection3.add_version(get_version(self.bootstrap.pages["page5"]))
