@@ -30,3 +30,25 @@ class Collections(Component):
             workflow=self.bootstrap.workflows["wf4"],
         )
         collection3.add_version(get_version(self.bootstrap.pages["page5"]))
+
+        collection4 = ModerationCollection.objects.create(
+            author=self.bootstrap.users["moderator"],
+            name="Collection 4",
+            workflow=self.bootstrap.workflows["wf4"],
+        )
+        collection4.add_version(get_version(self.bootstrap.pages["page6"]))
+
+
+        collection5 = ModerationCollection.objects.create(
+            author=self.bootstrap.users["moderator2"],
+            name="Collection 5",
+            workflow=self.bootstrap.workflows["wf4"],
+        )
+        collection5.add_version(get_version(self.bootstrap.pages["page7"]))
+
+        collection6 = ModerationCollection.objects.create(
+            author=self.bootstrap.users["moderator3"],
+            name="Collection 6",
+            workflow=self.bootstrap.workflows["wf5"],
+        )
+        collection6.add_version(get_version(self.bootstrap.pages["page8"]))
