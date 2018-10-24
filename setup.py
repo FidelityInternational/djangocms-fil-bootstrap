@@ -26,7 +26,6 @@ setup(
     install_requires=INSTALL_REQUIREMENTS,
     test_suite="test_settings.run",
     author="Fidelity International",
-    author_email="",
     url="http://github.com/FidelityInternational/djangocms-fil-bootstrap",
     license="BSD",
 )
