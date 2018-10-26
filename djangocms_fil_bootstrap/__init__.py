@@ -4,6 +4,8 @@ __version__ = "0.0.1"
 
 
 def bootstrap():
+    from factory.random import reseed_random
+    reseed_random(0)
     from .bootstrap import Bootstrap
     from .components import Collections, Groups, Pages, Permissions, Users, Workflows
 
