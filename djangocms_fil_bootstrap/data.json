@@ -493,7 +493,7 @@
             "title": "Page 8 by moderator",
             "template": "INHERIT",
             "language": "en",
-            "created_by": "moderator",
+            "created_by": "admin",
             "assignments": [
                 {
                     "user": "moderator",
@@ -511,6 +511,25 @@
                     "can_change": true
                 }
             ]
+        },
+        "page9": {
+            "title": "Page 9 by admin with permission given to moderator and not yet in collection",
+            "template": "INHERIT",
+            "language": "en",
+            "created_by": "admin",
+            "assignments": [
+                {
+                    "user": "moderator",
+                    "can_view": true,
+                    "can_change": true
+                }
+            ]
+        },
+        "page10": {
+            "title": "Page 10 by admin no permissions and not yet in collection",
+            "template": "INHERIT",
+            "language": "en",
+            "created_by": "admin"
         }
     }
 }
