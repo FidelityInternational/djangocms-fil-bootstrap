@@ -1,6 +1,6 @@
 from io import StringIO
 from pathlib import Path
-from unittest.mock import Mock, mock_open, patch
+from unittest.mock import mock_open, patch
 
 from django.core.management import CommandError, call_command
 from django.test import TestCase
@@ -60,6 +60,9 @@ class BootstrapCommandTest(TestCase):
                 call_command(command, "demo", stdout=out)
         file.assert_called_once_with(path.return_value)
         bootstrap.assert_called_once_with(file.return_value)
+        self.assertIn(
+            "An error occured while bootstrapping the project.", str(context.exception)
+        )
 
     def test_bootstrap(self):
         command = Command()

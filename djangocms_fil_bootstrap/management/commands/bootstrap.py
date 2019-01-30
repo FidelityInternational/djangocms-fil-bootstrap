@@ -32,7 +32,7 @@ class Command(BaseCommand):
         try:
             with open(candidate) as f, transaction.atomic():
                 bootstrap(f)
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             raise CommandError(
                 "Could not open specified file ({}). Aborting.".format(candidate)
             )
