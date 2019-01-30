@@ -1,6 +1,6 @@
-****************
+************************
 django CMS FIL Bootstrap
-****************
+************************
 
 ============
 Installation
@@ -28,4 +28,10 @@ Usage
 
 Run::
 
-    python manage.py bootstrap
+    python manage.py bootstrap <file>
+
+Where ``file`` is one of predefined data sources (for example: ``demo``, or ``roles``).
+
+You can also provide your own data source by specifying ``-e`` argument::
+
+    python manage.py bootstrap -e <path>

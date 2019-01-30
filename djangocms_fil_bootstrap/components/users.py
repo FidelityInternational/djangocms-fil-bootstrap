@@ -1,10 +1,10 @@
-from djangocms_versioning.test_utils.factories import UserFactory
-
+from ..factories import UserFactory
 from .base import Component
 
 
 class Users(Component):
     field_name = "users"
+    default_factory = list
 
     def parse(self):
         for data in self.raw_data:

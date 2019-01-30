@@ -88,21 +88,21 @@
             "group": "artworker"
         }
     },
-    "permission_aliases": {
-        "change_moderationcollection_author": ["can_change_author", "djangocms_moderation", "moderationcollection"],
-        "add_moderationcollection": ["add_moderationcollection", "djangocms_moderation", "moderationcollection"],
-        "change_moderationcollection": ["change_moderationcollection", "djangocms_moderation", "moderationcollection"],
-        "add_moderationrequest": ["add_moderationrequest", "djangocms_moderation", "moderationrequest"],
-        "change_moderationrequest": ["change_moderationrequest", "djangocms_moderation", "moderationrequest"],
-        "add_moderationrequestaction": ["add_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
-        "change_moderationrequestaction": ["change_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
-        "add_collectioncomment": ["add_collectioncomment", "djangocms_moderation", "collectioncomment"],
-        "change_collectioncomment": ["change_collectioncomment", "djangocms_moderation", "collectioncomment"],
-        "use_structure": ["use_structure", "cms", "placeholder"],
-        "view_page": ["view_page", "cms", "page"],
-        "change_page": ["change_page", "cms", "page"]
-    },
     "permissions": {
+        "aliases": {
+            "change_moderationcollection_author": ["can_change_author", "djangocms_moderation", "moderationcollection"],
+            "add_moderationcollection": ["add_moderationcollection", "djangocms_moderation", "moderationcollection"],
+            "change_moderationcollection": ["change_moderationcollection", "djangocms_moderation", "moderationcollection"],
+            "add_moderationrequest": ["add_moderationrequest", "djangocms_moderation", "moderationrequest"],
+            "change_moderationrequest": ["change_moderationrequest", "djangocms_moderation", "moderationrequest"],
+            "add_moderationrequestaction": ["add_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
+            "change_moderationrequestaction": ["change_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
+            "add_collectioncomment": ["add_collectioncomment", "djangocms_moderation", "collectioncomment"],
+            "change_collectioncomment": ["change_collectioncomment", "djangocms_moderation", "collectioncomment"],
+            "use_structure": ["use_structure", "cms", "placeholder"],
+            "view_page": ["view_page", "cms", "page"],
+            "change_page": ["change_page", "cms", "page"]
+        },
         "groups": {
             "reviewer": [
                 "change_moderationcollection",
@@ -204,6 +204,9 @@
                 "change_moderationrequest"
             ]
         }
+    },
+    "collections": {
+        "enable": true
     },
     "workflows": {
         "wf1": {

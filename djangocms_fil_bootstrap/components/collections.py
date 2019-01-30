@@ -1,15 +1,20 @@
 from djangocms_moderation.models import ModerationCollection
 
-from .base import Component
 from ..utils import get_version
+from .base import Component
 
 
 class Collections(Component):
     field_name = "collections"
 
     def parse(self):
+        if not self.raw_data.get("enable", False):
+            return
+        moderator = self.bootstrap.users["moderator"]
+        moderator2 = self.bootstrap.users["moderator2"]
+        moderator3 = self.bootstrap.users["moderator3"]
         collection1 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["moderator"],
+            author=moderator,
             name="Collection 1",
             workflow=self.bootstrap.workflows["wf4"],
         )
@@ -17,7 +22,7 @@ class Collections(Component):
         collection1.add_version(get_version(self.bootstrap.pages["page2"]))
 
         collection2 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["moderator2"],
+            author=moderator2,
             name="Collection 2",
             workflow=self.bootstrap.workflows["wf4"],
         )
@@ -25,29 +30,28 @@ class Collections(Component):
         collection2.add_version(get_version(self.bootstrap.pages["page4"]))
 
         collection3 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["moderator3"],
+            author=moderator3,
             name="Collection 3",
             workflow=self.bootstrap.workflows["wf4"],
         )
         collection3.add_version(get_version(self.bootstrap.pages["page5"]))
 
         collection4 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["moderator"],
+            author=moderator,
             name="Collection 4",
             workflow=self.bootstrap.workflows["wf4"],
         )
         collection4.add_version(get_version(self.bootstrap.pages["page6"]))
 
-
         collection5 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["moderator2"],
+            author=moderator2,
             name="Collection 5",
             workflow=self.bootstrap.workflows["wf4"],
         )
         collection5.add_version(get_version(self.bootstrap.pages["page7"]))
 
         collection6 = ModerationCollection.objects.create(
-            author=self.bootstrap.users["moderator3"],
+            author=moderator3,
             name="Collection 6",
             workflow=self.bootstrap.workflows["wf5"],
         )

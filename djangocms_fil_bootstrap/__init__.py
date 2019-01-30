@@ -1,15 +1,14 @@
-import os
+from factory.random import reseed_random
 
 __version__ = "0.0.1"
 
+__all__ = ["bootstrap"]
 
-def bootstrap():
-    from factory.random import reseed_random
+
+def bootstrap(file_):
     reseed_random(0)
-    from .bootstrap import Bootstrap
+    from .bootstrapper import Bootstrap
     from .components import Collections, Groups, Pages, Permissions, Users, Workflows
 
-    bootstrap = Bootstrap(
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), "data.json")
-    )
+    bootstrap = Bootstrap(file_)
     bootstrap(Users, Groups, Permissions, Pages, Workflows, Collections)
