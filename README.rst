@@ -2,6 +2,13 @@
 django CMS FIL Bootstrap
 ************************
 
+========
+Overview
+========
+
+django CMS FIL Bootstrap allows users to load initial set of data into the database.
+It can be used to create user groups, setup permissions and more.
+
 ============
 Installation
 ============
