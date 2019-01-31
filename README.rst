@@ -35,10 +35,9 @@ Usage
 
 Run::
 
-    python manage.py bootstrap <file>
+    python manage.py bootstrap (<file> <file>|--all)
 
-Where ``file`` is one of predefined data sources (for example: ``demo``, or ``roles``).
+Where ``file`` is one of predefined data sources (for example: ``demo``, or ``roles``),
+or path to your own data source.
 
-You can also provide your own data source by specifying ``-e`` argument::
-
-    python manage.py bootstrap -e <path>
+Alternatively, specifying `--all` will use all predefined data sources (roles, demo).

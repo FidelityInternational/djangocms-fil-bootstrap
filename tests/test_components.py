@@ -11,10 +11,7 @@ from djangocms_fil_bootstrap.components import (
     Workflows,
 )
 from djangocms_fil_bootstrap.components.base import Component
-from djangocms_fil_bootstrap.components.permissions import (
-    codename,
-    natural_key,
-)
+from djangocms_fil_bootstrap.components.permissions import codename, natural_key
 from djangocms_fil_bootstrap.test_utils.factories import (
     GroupFactory,
     PageVersionFactory,
