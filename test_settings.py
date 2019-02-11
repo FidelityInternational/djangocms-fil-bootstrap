@@ -5,6 +5,7 @@ HELPER_SETTINGS = {
         "djangocms_column",
         "djangocms_fil_bootstrap",
         "djangocms_versioning",
+        "djangocms_version_locking",
         "djangocms_moderation",
     ],
     "CMS_PERMISSION": True,

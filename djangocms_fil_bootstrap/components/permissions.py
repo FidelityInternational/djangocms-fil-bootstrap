@@ -23,26 +23,36 @@ def codename(triple):
 
 class Permissions(Component):
     field_name = "permissions"
+    default_factory = dict
 
     def parse(self):
-        aliases = self.bootstrap.data("permission_aliases")
-        for username, perms in self.raw_data["users"].items():
-            user = self.bootstrap.users[username]
-            user.user_permissions.add(
-                *self.get_permissions(self.resolve_aliases(aliases, perms))
-            )
-        for group_name, perms in self.raw_data["groups"].items():
-            group = self.bootstrap.groups[group_name]
-            group.permissions.add(
-                *self.get_permissions(self.resolve_aliases(aliases, perms))
-            )
+        aliases = self.raw_data.get("aliases", {})
+        for username, perms in self.raw_data.get("users", {}).items():
+            self.add_permissions_to_user(username, perms, aliases)
+        for group_name, perms in self.raw_data.get("groups", {}).items():
+            self.add_permissions_to_group(group_name, perms, aliases)
 
-    def resolve_aliases(self, aliases, perms):
+    def add_permissions_to_user(self, username, perms, aliases):
+        user = self.bootstrap.users[username]
+        user.user_permissions.add(
+            *self.get_permissions(self.resolve_aliases(perms, aliases))
+        )
+
+    def add_permissions_to_group(self, group_name, perms, aliases):
+        group = self.bootstrap.groups[group_name]
+        group.permissions.add(
+            *self.get_permissions(self.resolve_aliases(perms, aliases))
+        )
+
+    def resolve_aliases(self, perms, aliases):
         for perm in perms:
-            if not isinstance(perm, str):
-                yield perm
-            else:
-                yield aliases[perm]
+            yield self.resolve_alias(perm, aliases)
+
+    def resolve_alias(self, perm, aliases):
+        if not isinstance(perm, str):
+            return perm
+        else:
+            return aliases[perm]
 
     def get_permissions(self, perms):
         q = Q()
@@ -54,4 +64,6 @@ class Permissions(Component):
                 logger.debug("Missing content type: %(ctype)s", key)
                 continue
             q |= Q(content_type=ctype, codename__in=[codename(perm) for perm in group])
+        if not q:
+            return Permission.objects.none()
         return Permission.objects.filter(q)

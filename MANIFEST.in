@@ -1,4 +1,4 @@
 include LICENSE.txt
 include README.rst
-include djangocms_fil_bootstrap/data.json
+recursive-include djangocms_fil_bootstrap/builtin_data *
 recursive-exclude * *.pyc
