@@ -6,6 +6,7 @@ import djangocms_fil_bootstrap
 INSTALL_REQUIREMENTS = [
     "Django>=1.11,<2.2",
     # 'django-cms>=4.0',
+    "factory_boy>=2.11",
 ]
 
 
