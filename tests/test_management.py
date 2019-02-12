@@ -14,7 +14,8 @@ class BootstrapCommandTest(TestCase):
         with self.assertRaises(CommandError) as context:
             call_command("bootstrap", stdout=out)
         self.assertEqual(
-            str(context.exception), "Error: one of the arguments source --all/-a is required"
+            str(context.exception),
+            "Error: one of the arguments source --all/-a is required",
         )
 
     def test_get_file_path_external(self):
@@ -41,10 +42,7 @@ class BootstrapCommandTest(TestCase):
             file.side_effect = FileNotFoundError
             with self.assertRaises(CommandError) as context:
                 call_command(command, "demo", stdout=out)
-        file.assert_has_calls([
-            call(path.return_value),
-            call(path.return_value),
-        ])
+        file.assert_has_calls([call(path.return_value), call(path.return_value)])
         bootstrap.assert_not_called()
         self.assertEqual(
             str(context.exception), "Could not open specified file (demo). Aborting."
@@ -90,13 +88,6 @@ class BootstrapCommandTest(TestCase):
         ) as file:
             file.side_effect = [FileNotFoundError, file1, file2]
             out = StringIO()
-            call_command(command, '--all', stdout=out)
-        path(
-            call("file1", False),
-            call("file1", True),
-            call("file1", False),
-        )
-        bootstrap.assert_has_calls([
-            call(file1),
-            call(file2),
-        ])
+            call_command(command, "--all", stdout=out)
+        path(call("file1", False), call("file1", True), call("file1", False))
+        bootstrap.assert_has_calls([call(file1), call(file2)])

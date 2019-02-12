@@ -1,11 +1,11 @@
-from factory.random import reseed_random
-
 __version__ = "0.0.3"
 
 __all__ = ["bootstrap"]
 
 
 def bootstrap(file_):
+    from factory.random import reseed_random
+
     reseed_random(0)
     from .bootstrapper import Bootstrap
     from .components import Collections, Groups, Pages, Permissions, Users, Workflows
