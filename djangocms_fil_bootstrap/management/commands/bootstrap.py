@@ -36,7 +36,7 @@ class Command(BaseCommand):
         if options["all"]:
             sources = default_sources
         else:
-            sources = options['sources']
+            sources = options["sources"]
         for source in sources:
             for external in (False, True):
                 try:
