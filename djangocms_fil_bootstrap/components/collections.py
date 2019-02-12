@@ -6,6 +6,7 @@ from .base import Component
 
 class Collections(Component):
     field_name = "collections"
+    default_factory = dict
 
     def parse(self):
         if not self.raw_data.get("enable", False):
