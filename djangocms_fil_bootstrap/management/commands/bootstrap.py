@@ -29,7 +29,7 @@ class Command(BaseCommand):
         else:
             package_root = Path(__file__).resolve().parents[2]
             candidate = package_root / "builtin_data" / "{file}.json".format(file=path)
-        return candidate
+        return str(candidate)
 
     @transaction.atomic
     def handle(self, **options):
