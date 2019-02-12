@@ -21,7 +21,8 @@ class Workflows(Component):
             data["user"] = self.bootstrap.users[data["user"]]
         if "group" in data:
             data["group"] = self.bootstrap.groups[data["group"]]
-        return Role.objects.create(**data)
+        role, created = Role.objects.get_or_create(**data)
+        return role
 
     def workflows(self, roles):
         for name, data in self.raw_data.items():
