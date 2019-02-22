@@ -16,7 +16,7 @@ from djangocms_fil_bootstrap.components import (
 class MainTestCase(TestCase):
     def test_bootstrap(self):
         file_ = Mock()
-        with patch("djangocms_fil_bootstrap.reseed_random") as reseed_random, patch(
+        with patch("factory.random.reseed_random") as reseed_random, patch(
             "djangocms_fil_bootstrap.bootstrapper.Bootstrap"
         ) as Bootstrap:
             bootstrap(file_)
