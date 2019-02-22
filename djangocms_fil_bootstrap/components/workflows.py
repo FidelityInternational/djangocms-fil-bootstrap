@@ -16,19 +16,12 @@ class Workflows(Component):
             name: self.role(data) for name, data in roles
         }
 
-    def role(self, incoming):
-        outgoing = incoming
-        if "user" in incoming:
-            outgoing["user"] = self.bootstrap.users[incoming["user"]]
-        if "group" in incoming:
-            outgoing["group"] = self.bootstrap.groups[incoming["group"]]
-        exists = Role.objects.filter(name=incoming["name"])
-        if exists:
-            exists.update(**outgoing)
-            role = exists.first()
-            role.refresh_from_db()
-        else:
-            role = Role.objects.create(**outgoing)
+    def role(self, data):
+        if "user" in data:
+            data["user"] = self.bootstrap.users[data["user"]]
+        if "group" in data:
+            data["group"] = self.bootstrap.groups[data["group"]]
+        role, created = Role.objects.get_or_create(**data)
         return role
 
     def workflows(self, roles):

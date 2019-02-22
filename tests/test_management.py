@@ -24,9 +24,9 @@ class BootstrapCommandTest(TestCase):
 
     def test_get_file_path_builtin(self):
         command = Command()
-        result = command.get_file_path("foo", external=False)
+        result = command.get_file_path("roles", external=False)
         self.assertEqual(
-            result, Path("djangocms_fil_bootstrap/builtin_data/foo.json").resolve()
+            result, str(Path("djangocms_fil_bootstrap/builtin_data/roles.json").resolve())
         )
 
     def test_bootstrap_file_not_found(self):

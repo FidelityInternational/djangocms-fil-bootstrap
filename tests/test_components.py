@@ -45,7 +45,7 @@ class BaseTestCase(TestCase):
         component = TestComponent(Mock())
         with patch.object(component, "parse") as parse:
             component("foo")
-        parse.assert_called_once()
+        parse.assert_called_once_with()
 
     def test_call_calls_default_factory_if_input_is_none(self):
         factory = Mock(return_value="data from factory")
@@ -54,7 +54,7 @@ class BaseTestCase(TestCase):
         )
         component = FactoryTestComponent(Mock())
         component(None)
-        factory.assert_called_once()
+        factory.assert_called_once_with()
         self.assertEqual(component.raw_data, "data from factory")
 
     def test_getattr(self):
@@ -138,7 +138,7 @@ class GroupsTestCase(TestCase):
         self.assertIn("foo", component.data)
         group = component.data["foo"]
         self.assertEqual(group.name, "visible name")
-        add_user_to_group.assert_has_calls([call(group, "user1"), call(group, "user2")])
+        add_user_to_group.assert_has_calls([call(group, "user1"), call(group, "user2")], any_order=True)
 
 
 class PermissionsTestCase(TestCase):
@@ -172,7 +172,7 @@ class PermissionsTestCase(TestCase):
         ) as resolve_alias:
             result = list(component.resolve_aliases(perms, aliases))
         resolve_alias.assert_has_calls(
-            [call(perms[0], aliases), call(perms[1], aliases), call(perms[2], aliases)]
+            [call(perms[0], aliases), call(perms[1], aliases), call(perms[2], aliases)], any_order=True
         )
         self.assertEqual(result, side_effects)
 
@@ -277,7 +277,7 @@ class PagesTestCase(TestCase):
                     target=add_plugin.return_value,
                     child_data="bar",
                 ),
-            ]
+            ], any_order=True
         )
 
     def test_parse(self):
@@ -285,7 +285,7 @@ class PagesTestCase(TestCase):
         component.raw_data = {"page1": "bar", "page2": "baz"}
         with patch.object(component, "each") as each:
             component.parse()
-        each.assert_has_calls([call("page1", "bar"), call("page2", "baz")])
+        each.assert_has_calls([call("page1", "bar"), call("page2", "baz")], any_order=True)
 
     def test_each(self):
         user = UserFactory()
@@ -429,7 +429,7 @@ class WorkflowsTestCase(TestCase):
         component = Workflows(bootstrap)
         with patch.object(component, "role", side_effect=roles.values()) as role:
             result = component.roles()
-        role.assert_has_calls([call(role1), call(role2), call(role3)])
+        role.assert_has_calls([call(role1), call(role2), call(role3)], any_order=True)
         self.assertEqual(result, {"role1": role1, "role2": role2, "role3": role3})
 
     def test_workflow(self):
@@ -467,7 +467,7 @@ class WorkflowsTestCase(TestCase):
             [
                 call("wf1", {"name": "Workflow 1"}, roles),
                 call("wf2", {"name": "Workflow 2"}, roles),
-            ]
+            ], any_order=True
         )
 
     def test_parse(self):
