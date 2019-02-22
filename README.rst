@@ -80,3 +80,13 @@ a-json-file.json
 
 ```NewUsers`` must be added to a list of components executed in :func:`djangocms_fil_bootstrap.bootstrap`.
 
+
+==============
+Data structure
+==============
+
+-----------
+Permissions
+-----------
+* Use `aliases` to create shortnames for permissions. The idea is if a permission is repeated more than once, use an alias instead.
+* List each permission by group or user
