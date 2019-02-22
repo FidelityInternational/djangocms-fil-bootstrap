@@ -8,20 +8,28 @@ class Workflows(Component):
     default_factory = dict
 
     def parse(self):
-        roles = self.roles()
+        roles = self.roles(self.bootstrap.data("roles").items())
         self.workflows(roles)
 
-    def roles(self):
+    def roles(self, roles):
         return {
-            name: self.role(data) for name, data in self.bootstrap.data("roles").items()
+            name: self.role(data) for name, data in roles
         }
 
-    def role(self, data):
-        if "user" in data:
-            data["user"] = self.bootstrap.users[data["user"]]
-        if "group" in data:
-            data["group"] = self.bootstrap.groups[data["group"]]
-        return Role.objects.create(**data)
+    def role(self, incoming):
+        outgoing = incoming
+        if "user" in incoming:
+            outgoing["user"] = self.bootstrap.users[incoming["user"]]
+        if "group" in incoming:
+            outgoing["group"] = self.bootstrap.groups[incoming["group"]]
+        exists = Role.objects.filter(name=incoming["name"])
+        if exists:
+            exists.update(**outgoing)
+            role = exists.first()
+            role.refresh_from_db()
+        else:
+            role = Role.objects.create(**outgoing)
+        return role
 
     def workflows(self, roles):
         for name, data in self.raw_data.items():
