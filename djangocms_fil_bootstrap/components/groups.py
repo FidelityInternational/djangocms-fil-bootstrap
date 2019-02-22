@@ -9,7 +9,7 @@ class Groups(Component):
 
     def parse(self):
         for name, data in self.raw_data.items():
-            group = Group.objects.create(name=data["name"])
+            group, created = Group.objects.get_or_create(name=data["name"])
             for username in data.get("users", []):
                 self.add_user_to_group(group, username)
             self.data[name] = group
