@@ -8,12 +8,12 @@ class Workflows(Component):
     default_factory = dict
 
     def parse(self):
-        roles = self.roles(self.bootstrap.data("roles").items())
+        roles = self.roles()
         self.workflows(roles)
 
-    def roles(self, roles):
+    def roles(self):
         return {
-            name: self.role(data) for name, data in roles
+            name: self.role(data) for name, data in self.bootstrap.data("roles").items()
         }
 
     def role(self, data):

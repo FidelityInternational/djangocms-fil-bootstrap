@@ -1,4 +1,4 @@
-from unittest.mock import Mock, call, patch
+from unittest.mock import MagicMock, Mock, call, patch
 
 from django.test import TestCase
 
@@ -481,37 +481,14 @@ class WorkflowsTestCase(TestCase):
 
 
 class CollectionsTestCase(TestCase):
-    def test_not_enabled(self):
-        component = Collections(Mock())
-        component.raw_data = {"enable": False}
-        component.parse()
-        self.assertFalse(ModerationCollection.objects.exists())
-
-    def test_enabled(self):
-        user1 = UserFactory()
-        user2 = UserFactory()
-        role1 = Role.objects.create(name="Role 1", user=user1)
-        role2 = Role.objects.create(name="Role 2", user=user2)
-        versions = PageVersionFactory.create_batch(8)
-        pages = [version.content.page for version in versions]
-        workflow = Workflow.objects.create(name="Workflow 1", is_default=False)
-        workflow.steps.create(role=role1, order=1)
-        workflow.steps.create(role=role2, order=2)
-        bootstrap = Mock(
-            users={"moderator": user1, "moderator2": user1, "moderator3": user1},
-            pages={
-                "page1": pages[0],
-                "page2": pages[1],
-                "page3": pages[2],
-                "page4": pages[3],
-                "page5": pages[4],
-                "page6": pages[5],
-                "page7": pages[6],
-                "page8": pages[7],
-            },
-            workflows={"wf4": workflow, "wf5": workflow},
-        )
+    def test_parse(self):
+        user = UserFactory()
+        user.username = 'user1'
+        user.save()
+        user.refresh_from_db()
+        bootstrap = Mock(users={"user1": user}, workflows={"wf1": Workflow.objects.create(name="Workflow 1")})
         component = Collections(bootstrap)
-        component.raw_data = {"enable": True}
+        component.raw_data = {'collection1': {'pages': ['page1', 'page2'], 'name': 'Collection 1', 'user': 'user1', 'workflow': 'wf1'}}            
         component.parse()
-        self.assertEqual(ModerationCollection.objects.count(), 6)
+        self.assertIn("foo", component.data)
+        self.assertEqual(component.data["foo"].name, "visible name")

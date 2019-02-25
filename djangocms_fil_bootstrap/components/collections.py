@@ -9,13 +9,19 @@ class Collections(Component):
     default_factory = dict
 
     def parse(self):
-
         for name, data in self.raw_data.items():
-            collection = ModerationCollection.objects.create(
-                author=self.bootstrap.users(data["user"]),
-                name=data["name"],
-                workflow=self.bootstrap.workflows(data["workflow"])
-            )
+            collection_data = {
+                "author": self.bootstrap.users[data["user"]],
+                "workflow": self.bootstrap.workflows[data["workflow"]]
+            }
+            collection = self.get_or_create(collection_data)
+            import ipdb; ipdb.set_trace()
             for page in data.get("pages", []):
-                collection.add_version(get_version(page))
+                self.add_version(collection, get_version(self.bootstrap.pages.data.get(page)))
 
+    def get_or_create(self, collection_data):
+        collection, created = ModerationCollection.objects.get_or_create(**collection_data)
+        return collection
+
+    def add_version(self, collection, version):
+        collection.add_version(version)
