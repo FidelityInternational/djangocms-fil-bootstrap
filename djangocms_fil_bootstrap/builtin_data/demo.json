@@ -67,131 +67,6 @@
             "name": "Publisher Role"
         }
     },
-    "workflows": {
-        "wf1": {
-            "name": "Workflow 1",
-            "is_default": true,
-            "steps": [
-                {
-                    "role": "reviewer",
-                    "is_required": true,
-                    "order": 1
-                },
-                {
-                    "role": "reviewer2",
-                    "is_required": false,
-                    "order": 2
-                },
-                {
-                    "role": "publisher",
-                    "is_required": true,
-                    "order": 3
-                }
-            ]
-        },
-        "wf2": {
-            "name": "Workflow 2",
-            "steps": [
-                {
-                    "role": "reviewer",
-                    "is_required": true,
-                    "order": 1
-                },
-                {
-                    "role": "publisher",
-                    "is_required": true,
-                    "order": 2
-                }
-            ]
-        },
-        "wf3": {
-            "name": "Workflow 3",
-            "steps": [
-                {
-                    "role": "reviewer",
-                    "is_required": true,
-                    "order": 1
-                },
-                {
-                    "role": "publisher",
-                    "is_required": false,
-                    "order": 2
-                }
-            ]
-        },
-        "wf4": {
-            "name": "NCO",
-            "steps": [
-                {
-                    "role": "reviewer",
-                    "is_required": true,
-                    "order": 1
-                }
-            ]
-        },
-        "wf5": {
-            "name": "NCO2",
-            "steps": [
-                {
-                    "role": "reviewer2",
-                    "is_required": true,
-                    "order": 1
-                }
-            ]
-        }
-    },
-    "collections": {
-        "collection1": {
-            "user": "publisher",
-            "name": "Collection 1",
-            "workflow": "wf4",
-            "pages": [
-                "page1",
-                "page2"
-            ]
-        },
-        "collection2": {
-            "user": "publisher2",
-            "name": "Collection 2",
-            "workflow": "wf4",
-            "pages": [
-                "page3",
-                "page4"
-            ]
-        },
-        "collection3": {
-            "user": "publisher3",
-            "name": "Collection 3",
-            "workflow": "wf4",
-            "pages": [
-                "page5"
-            ]
-        },
-        "collection4": {
-            "user": "publisher",
-            "name": "Collection 4",
-            "workflow": "wf4",
-            "pages": [
-                "page6"
-            ]
-        },
-        "collection5": {
-            "user": "publisher2",
-            "name": "Collection 5",
-            "workflow": "wf4",
-            "pages": [
-                "page7"
-            ]
-        },
-        "collection6": {
-            "user": "publisher3",
-            "name": "Collection 6",
-            "workflow": "wf5",
-            "pages": [
-                "page8"
-            ]
-        }
-    },
     "pages": {
         "homepage": {
             "title": "Home",
@@ -444,6 +319,131 @@
             "template": "INHERIT",
             "language": "en",
             "created_by": "admin"
+        }
+    },
+    "workflows": {
+        "wf1": {
+            "name": "Workflow 1",
+            "is_default": true,
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "reviewer2",
+                    "is_required": false,
+                    "order": 2
+                },
+                {
+                    "role": "publisher",
+                    "is_required": true,
+                    "order": 3
+                }
+            ]
+        },
+        "wf2": {
+            "name": "Workflow 2",
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "publisher",
+                    "is_required": true,
+                    "order": 2
+                }
+            ]
+        },
+        "wf3": {
+            "name": "Workflow 3",
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "publisher",
+                    "is_required": false,
+                    "order": 2
+                }
+            ]
+        },
+        "wf4": {
+            "name": "NCO",
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                }
+            ]
+        },
+        "wf5": {
+            "name": "NCO2",
+            "steps": [
+                {
+                    "role": "reviewer2",
+                    "is_required": true,
+                    "order": 1
+                }
+            ]
+        }
+    },
+    "collections": {
+        "collection1": {
+            "user": "publisher",
+            "name": "Collection 1",
+            "workflow": "wf4",
+            "pages": [
+                "page1",
+                "page2"
+            ]
+        },
+        "collection2": {
+            "user": "publisher2",
+            "name": "Collection 2",
+            "workflow": "wf4",
+            "pages": [
+                "page3",
+                "page4"
+            ]
+        },
+        "collection3": {
+            "user": "publisher3",
+            "name": "Collection 3",
+            "workflow": "wf4",
+            "pages": [
+                "page5"
+            ]
+        },
+        "collection4": {
+            "user": "publisher",
+            "name": "Collection 4",
+            "workflow": "wf4",
+            "pages": [
+                "page6"
+            ]
+        },
+        "collection5": {
+            "user": "publisher2",
+            "name": "Collection 5",
+            "workflow": "wf4",
+            "pages": [
+                "page7"
+            ]
+        },
+        "collection6": {
+            "user": "publisher3",
+            "name": "Collection 6",
+            "workflow": "wf5",
+            "pages": [
+                "page8"
+            ]
         }
     }
 }
