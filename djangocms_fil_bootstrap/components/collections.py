@@ -12,12 +12,15 @@ class Collections(Component):
         for name, data in self.raw_data.items():
             collection_data = {
                 "author": self.bootstrap.users[data["user"]],
-                "workflow": self.bootstrap.workflows[data["workflow"]]
+                "workflow": self.bootstrap.workflows[data["workflow"]],
+                "name": name,
             }
             collection = self.get_or_create(collection_data)
-            import ipdb; ipdb.set_trace()
             for page in data.get("pages", []):
-                self.add_version(collection, get_version(self.bootstrap.pages.data.get(page)))
+                self.add_version(collection, self.get_version(self.bootstrap.pages.data.get(page)))
+
+    def get_version(self, page):
+        return get_version(page)
 
     def get_or_create(self, collection_data):
         collection, created = ModerationCollection.objects.get_or_create(**collection_data)
