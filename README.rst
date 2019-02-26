@@ -89,7 +89,10 @@ a-json-file.json
             for user in self.raw_data:
                 User.objects.create(username=user, password=user)
 
-```NewUsers`` must be added to a list of components executed in :func:`djangocms_fil_bootstrap.bootstrap`.
+::
+
+    `NewUsers must be added to a list of components executed in :func:
+    djangocms_fil_bootstrap.bootstrap`.
 
 
 ==============
