@@ -2,26 +2,18 @@
 django CMS FIL Bootstrap
 ************************
 
-========
 Overview
 ========
 
 django CMS FIL BootstrÊap allows users to load initial set of data into the database.
 It can be used to create user groups, setup permissions and more.
 
-============
-Installation
-============
-
 Requirements
 ============
-
-
-
 django CMS FIL Bootstrap requires that you have a django CMS 4.0 (or higher) project already running and set up.
 
 
-To install
+Installation
 ==========
 
 Run::
@@ -31,7 +23,6 @@ Run::
 Add ``djangocms_fil_bootstrap`` to your project's ``INSTALLED_APPS``.
 
 
-=====
 Usage
 =====
 
@@ -45,7 +36,6 @@ or path to your own data source.
 Alternatively, specifying ``--all`` will use all predefined data sources (roles, demo).
 
 
-============
 Architecture
 ============
 
@@ -66,17 +56,13 @@ Example:
 
 a-json-file.json
 
-:: 
-
-    code-block:: json
 
     {
       "users": ["bar", "baz"]
     }
 
-:: 
 
-    code-block:: python
+python component
 
     from django.contrib.auth.models import User
     from djangocms_fil_bootstrap.components import Components
@@ -89,13 +75,11 @@ a-json-file.json
             for user in self.raw_data:
                 User.objects.create(username=user, password=user)
 
-::
 
     `NewUsers must be added to a list of components executed in :func:
     djangocms_fil_bootstrap.bootstrap`.
 
 
-==============
 Data structure
 ==============
 Note that it is possible to conform to DRY principles *to a degree*. If you wish to accumulate data, then records in later files will still need to be defined but they do not require all the data to be present, providing that your component uses `get_or_create` when generating new records.
@@ -107,10 +91,6 @@ And the json data type (i.e. list or object) for a given root key should corresp
 
 Thus in `roles.json` you might have this structure:
 
-:: 
-    
-    code-block:: json
-
     "roles": {
         "publisher": {
             "name": "Publisher Role",
@@ -120,10 +100,6 @@ Thus in `roles.json` you might have this structure:
 
 
 Then in `demo.json` you may wish to use that role for generating related data, in which case you simply need to provide the unique identifier:
-
-:: 
-    
-    code-block:: json
 
     "roles": {
         "publisher": {
@@ -144,8 +120,8 @@ Then in `demo.json` you may wish to use that role for generating related data, i
                 }
         },
         
------------
+
 Permissions
------------
+===========
 * Use `aliases` to create shortnames for permissions. The idea is if a permission is repeated more than once, use an alias instead.
 * List each permission by group or user
