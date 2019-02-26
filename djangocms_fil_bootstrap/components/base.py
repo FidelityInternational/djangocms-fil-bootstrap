@@ -8,8 +8,8 @@ class Component(metaclass=ABCMeta):
         """Key used to get the data from the data source, as well
         as store the data in bootstrap object.
 
-        Data saved under "foo" key can be used by components
-        next in chain by accessing `self.bootstrap.data.foo`.
+        Data saved under “foo” key can be used by components
+        next in chain by accessing `self.bootstrap.foo`.
         """
 
     """Function that can be defined to create raw_data
@@ -27,9 +27,6 @@ class Component(metaclass=ABCMeta):
             raw_data = self.default_factory()
         self.raw_data = raw_data
         self.parse()
-
-    def __getattr__(self, name):
-        return self.data[name]
 
     def __getitem__(self, name):
         return self.data[name]
