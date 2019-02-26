@@ -6,7 +6,7 @@ django CMS FIL Bootstrap
 Overview
 ========
 
-django CMS FIL Bootstrap allows users to load initial set of data into the database.
+django CMS FIL BootstrÊap allows users to load initial set of data into the database.
 It can be used to create user groups, setup permissions and more.
 
 ============
@@ -15,6 +15,8 @@ Installation
 
 Requirements
 ============
+
+
 
 django CMS FIL Bootstrap requires that you have a django CMS 4.0 (or higher) project already running and set up.
 
@@ -52,6 +54,8 @@ Each of these represents a Django model for which to import data.
 Each of these extends the `components/base.py` Component class, which provides data accessors for 
 each component via magic methods.
 
+This allows you to then data from any key within any component by using: `self.bootstrap.data("other_key")`
+
 Each component specifies a ``field_name``, which is a key in the data source where the component's data is located.
 
 This data is then put in component's instance attribute called ``raw_data``. Component's ``parse`` method can then access that data.
@@ -62,13 +66,17 @@ Example:
 
 a-json-file.json
 
-.. code-block:: json
+:: 
+
+    code-block:: json
 
     {
       "users": ["bar", "baz"]
     }
 
-.. code-block:: python
+:: 
+
+    code-block:: python
 
     from django.contrib.auth.models import User
     from djangocms_fil_bootstrap.components import Components
@@ -91,12 +99,14 @@ Note that it is possible to conform to DRY principles *to a degree*. If you wish
 
 E.g. Let's say you have two json files to import: `roles.json` and `demo.json`. You may define all the permissions and roles in the first file. Any records which may be required in the second just need their unique identifier property, so that `get_or_create` will execute a SELECT instead of an INSERT.
 
-Note that each root key in your json data file must correspond by name with one of the components.
+Note that each root key in your json data file must correspond by name with one of the components, `Component.field_name` attribute.
 And the json data type (i.e. list or object) for a given root key should correspond to the `default_factory` 
 
 Thus in `roles.json` you might have this structure:
 
-.. code-block:: json
+:: 
+    
+    code-block:: json
 
     "roles": {
         "publisher": {
@@ -108,7 +118,9 @@ Thus in `roles.json` you might have this structure:
 
 Then in `demo.json` you may wish to use that role for generating related data, in which case you simply need to provide the unique identifier:
 
-.. code-block:: json
+:: 
+    
+    code-block:: json
 
     "roles": {
         "publisher": {

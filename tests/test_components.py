@@ -22,7 +22,6 @@ from djangocms_fil_bootstrap.utils import get_version
 from djangocms_moderation.models import ModerationCollection, Role, Workflow
 from djangocms_versioning.constants import DRAFT, PUBLISHED
 
-import sys
 
 class TestComponent(Component):
     field_name = "test"
