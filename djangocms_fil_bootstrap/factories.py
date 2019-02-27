@@ -14,11 +14,16 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = get_user_model()
-        django_get_or_create = ("username",)
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):
-        """Override the default ``_create`` with our custom call."""
+        """Return existing user instance if found.
+        Otherwise create a new user."""
         manager = cls._get_manager(model_class)
-        # The default would use ``manager.create(*args, **kwargs)``
+        username = kwargs.get("username")
+        if username is not None:
+            try:
+                return manager.get(username=username)
+            except model_class.DoesNotExist:
+                pass
         return manager.create_user(*args, **kwargs)

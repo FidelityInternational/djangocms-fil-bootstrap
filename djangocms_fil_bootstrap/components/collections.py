@@ -29,7 +29,9 @@ class Collections(Component):
             self.data[name] = collection
 
     def get_or_create(self, collection_data):
-        collection, created = ModerationCollection.objects.get_or_create(**collection_data)
+        collection, created = ModerationCollection.objects.get_or_create(
+            **collection_data
+        )
         return collection
 
     def add_version(self, collection, version):

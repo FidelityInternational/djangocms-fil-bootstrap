@@ -5,6 +5,7 @@ class Component(metaclass=ABCMeta):
     """
     This class should be extended for each model processor
     """
+
     @property
     @abstractmethod
     def field_name(self):
