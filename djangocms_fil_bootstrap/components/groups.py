@@ -17,4 +17,3 @@ class Groups(Component):
     def add_user_to_group(self, group, username):
         user = self.bootstrap.users[username]
         user.groups.add(group)
-

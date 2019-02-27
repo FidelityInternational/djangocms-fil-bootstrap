@@ -140,7 +140,6 @@ class UsersTestCase(TestCase):
         self.assertEqual(result["is_staff"], True)
         self.assertNotIn("foo", result)
 
-
     def test_prepare_each_dict(self):
         """
         Check what data is prepared by prepare_each function
@@ -188,7 +187,9 @@ class GroupsTestCase(TestCase):
         self.assertIn("foo", component.data)
         group = component.data["foo"]
         self.assertEqual(group.name, "visible name")
-        add_user_to_group.assert_has_calls([call(group, "user1"), call(group, "user2")], any_order=True)
+        add_user_to_group.assert_has_calls(
+            [call(group, "user1"), call(group, "user2")], any_order=True
+        )
 
 
 class PermissionsTestCase(TestCase):
@@ -222,7 +223,8 @@ class PermissionsTestCase(TestCase):
         ) as resolve_alias:
             result = list(component.resolve_aliases(perms, aliases))
         resolve_alias.assert_has_calls(
-            [call(perms[0], aliases), call(perms[1], aliases), call(perms[2], aliases)], any_order=True
+            [call(perms[0], aliases), call(perms[1], aliases), call(perms[2], aliases)],
+            any_order=True,
         )
         self.assertEqual(result, side_effects)
 
@@ -327,7 +329,8 @@ class PagesTestCase(TestCase):
                     target=add_plugin.return_value,
                     child_data="bar",
                 ),
-            ], any_order=True
+            ],
+            any_order=True,
         )
 
     def test_parse(self):
@@ -335,7 +338,9 @@ class PagesTestCase(TestCase):
         component.raw_data = {"page1": "bar", "page2": "baz"}
         with patch.object(component, "each") as each:
             component.parse()
-        each.assert_has_calls([call("page1", "bar"), call("page2", "baz")], any_order=True)
+        each.assert_has_calls(
+            [call("page1", "bar"), call("page2", "baz")], any_order=True
+        )
 
     def test_each(self):
         user = UserFactory()
@@ -517,7 +522,8 @@ class WorkflowsTestCase(TestCase):
             [
                 call("wf1", {"name": "Workflow 1"}, roles),
                 call("wf2", {"name": "Workflow 2"}, roles),
-            ], any_order=True
+            ],
+            any_order=True,
         )
 
     def test_parse(self):
@@ -538,7 +544,11 @@ class CollectionsTestCase(TestCase):
         self.page1 = self.version.content.page
         self.version2 = PageVersionFactory()
         self.page2 = self.version2.content.page
-        self.bootstrap = Mock(users={"user1": self.user}, workflows={"wf1": self.wf1}, pages={"page1": self.page1, "page2": self.page2})
+        self.bootstrap = Mock(
+            users={"user1": self.user},
+            workflows={"wf1": self.wf1},
+            pages={"page1": self.page1, "page2": self.page2},
+        )
         self.component = Collections(self.bootstrap)
 
     def test_parse_generates_collection(self):
@@ -546,45 +556,58 @@ class CollectionsTestCase(TestCase):
         Test that parsing is able to call the Collection.get_or_create method
         """
         component = self.component
-        component.raw_data = {'collection1': {'pages': ['page1', 'page2'], 'name': 'Collection 1', 'user': 'user1', 'workflow': 'wf1'}}            
+        component.raw_data = {
+            "collection1": {
+                "pages": ["page1", "page2"],
+                "name": "Collection 1",
+                "user": "user1",
+                "workflow": "wf1",
+            }
+        }
 
-        with patch.object(
-            component, 'get_or_create'
-        ) as get_or_create:
+        with patch.object(component, "get_or_create") as get_or_create:
             component.parse()
-            get_or_create.assert_called_once_with({'workflow': self.wf1, 'name': 'Collection 1', 'author': self.user})
-              
+            get_or_create.assert_called_once_with(
+                {"workflow": self.wf1, "name": "Collection 1", "author": self.user}
+            )
 
     def test_parse_stores_collection(self):
         """
         Test that parsing is able to call the Collection.get_or_create method
         """
         component = self.component
-        component.raw_data = {'collection1': {'pages': ['page1'], 'name': 'Collection 1', 'user': 'user1', 'workflow': 'wf1'}}            
-        with patch.object(
-            component, 'get_or_create'
-        ) as get_or_create:
-            component.parse()            
+        component.raw_data = {
+            "collection1": {
+                "pages": ["page1"],
+                "name": "Collection 1",
+                "user": "user1",
+                "workflow": "wf1",
+            }
+        }
+        with patch.object(component, "get_or_create") as get_or_create:
+            component.parse()
             collection_data = {
                 "author": self.user,
                 "workflow": self.wf1,
-                "name": 'Collection 1',
+                "name": "Collection 1",
             }
-            self.assertEqual(component.data['collection1'], get_or_create(collection_data))
+            self.assertEqual(
+                component.data["collection1"], get_or_create(collection_data)
+            )
 
     def test_get_or_create(self):
         # test add
         collection_data = {
             "author": self.user,
             "workflow": self.wf1,
-            "name": 'Collection 1',
+            "name": "Collection 1",
         }
         collection = self.component.get_or_create(collection_data)
         self.assertEqual(collection.id, 1)
         collection_data2 = {
             "author": self.user,
             "workflow": self.wf1,
-            "name": 'Collection 2',
+            "name": "Collection 2",
         }
         collection2 = self.component.get_or_create(collection_data2)
         self.assertEqual(collection2.id, 2)
@@ -601,22 +624,28 @@ class CollectionsTestCase(TestCase):
         collection_data = {
             "author": self.user,
             "workflow": self.wf1,
-            "name": 'Collection 1',
+            "name": "Collection 1",
         }
         collection = self.component.get_or_create(collection_data)
         version = self.component.add_version(collection, self.version)
         moderation_request = collection.moderation_requests.first()
         stored_version = moderation_request.version
         # check the stored version
-        self.assertEqual(self.version, stored_version) 
+        self.assertEqual(self.version, stored_version)
         # check the stored content
         self.assertEqual(moderation_request.version.content, self.version.content)
-        
+
     def test_integration(self):
         component = self.component
-        component.raw_data = {'collection1': {'pages': ['page1'], 'name': 'Collection 1', 'user': 'user1', 'workflow': 'wf1'}}            
+        component.raw_data = {
+            "collection1": {
+                "pages": ["page1"],
+                "name": "Collection 1",
+                "user": "user1",
+                "workflow": "wf1",
+            }
+        }
         component.parse()
         self.assertEqual(ModerationCollection.objects.count(), 1)
         collection = component.data["collection1"]
         self.assertEqual(collection.name, "Collection 1")
-
