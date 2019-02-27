@@ -1,4 +1,7 @@
 {
     "package-name": "djangocms-fil-bootstrap",
-    "installed-apps": ["djangocms_fil_bootstrap"]
+    "installed-apps": [
+        "djangocms_fil_bootstrap",
+        "djangocms_column"
+    ]
 }
