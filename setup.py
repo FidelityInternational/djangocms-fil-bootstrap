@@ -16,7 +16,7 @@ setup(
     include_package_data=True,
     version=djangocms_fil_bootstrap.__version__,
     description=djangocms_fil_bootstrap.__doc__,
-    long_description=open("README.rst").read(),
+    long_description=open("README.md").read(),
     classifiers=[
         "Framework :: Django",
         "Intended Audience :: Developers",

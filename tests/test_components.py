@@ -74,7 +74,7 @@ class BaseTestCase(TestCase):
         factory.assert_called_once_with()
         self.assertEqual(component.raw_data, "data from factory")
 
-    def test_getattr(self):
+    def test_getitem(self):
         """
         Tests magic method in base component. Component is expected to save it's data
         in the data attribute (as a dict). Before parse() the dict is always empty.
@@ -83,16 +83,6 @@ class BaseTestCase(TestCase):
         component = TestComponent(Mock())
         component.data = {"foo": "bar"}
         self.assertEqual(component["foo"], "bar")
-
-    def test_getitem(self):
-        """
-        Tests magic method in base component. Component is expected to save it's data
-        in the data attribute (as a dict). Before parse() the dict is always empty.
-        The parse method adds to that dictionary via the c.a format.
-        """
-        component = TestComponent(Mock())
-        component.data = {"foo": "bar"}
-        self.assertEqual(component.foo, "bar")
 
 
 class UsersTestCase(TestCase):
@@ -133,7 +123,7 @@ class UsersTestCase(TestCase):
 
     def test_prepare_each_only_username(self):
         """
-        Check what data is prepared by prepare_earch function
+        Check what data is prepared by prepare_each function
         Here it tests passing a string and fills in any blank expected keys.
         return_value="domain" is because: here we are mocking the entire 
         data function and always returns domain, so that we can know that 
@@ -153,7 +143,7 @@ class UsersTestCase(TestCase):
 
     def test_prepare_each_dict(self):
         """
-        Check what data is prepared by prepare_earch function
+        Check what data is prepared by prepare_each function
         Here it tests passing a dictionary and fills in any blank expected keys.
         """
         bootstrap = Mock(data=Mock(return_value="domain"))
@@ -566,9 +556,6 @@ class CollectionsTestCase(TestCase):
             component.parse()
             get_or_create.assert_called_once_with({'workflow': self.wf1, 'name': 'Collection 1', 'author': self.user})
             
-    def test_get_version(self):
-        version = self.component.get_version(self.page1)
-        self.assertEqual(self.version, version)
 
     def test_get_or_create(self):
         # test add
