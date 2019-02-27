@@ -7,6 +7,9 @@ Overview
 
 django CMS FIL Bootstrap allows users to load initial set of data into the database.
 It can be used to create user groups, setup permissions and more.
+The idea is that there would be a set of initial data (e.g. Groups and Permissions) that 
+would be common to all Fidelity Sites that integrate djangocms-moderation.
+
 
 Requirements
 ============
