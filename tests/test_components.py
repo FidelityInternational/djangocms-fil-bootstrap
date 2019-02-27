@@ -549,12 +549,8 @@ class CollectionsTestCase(TestCase):
         component.raw_data = {'collection1': {'pages': ['page1', 'page2'], 'name': 'Collection 1', 'user': 'user1', 'workflow': 'wf1'}}            
 
         with patch.object(
-            component, 'get_version', return_value=self.version
-        ) as get_version, patch.object(
             component, 'get_or_create'
-        ) as get_or_create, patch.object(
-            component, 'add_version'
-        ) as add_version:
+        ) as get_or_create:
             component.parse()
             get_or_create.assert_called_once_with({'workflow': self.wf1, 'name': 'Collection 1', 'author': self.user})
               
@@ -565,14 +561,9 @@ class CollectionsTestCase(TestCase):
         """
         component = self.component
         component.raw_data = {'collection1': {'pages': ['page1'], 'name': 'Collection 1', 'user': 'user1', 'workflow': 'wf1'}}            
-
         with patch.object(
-            component, 'get_version', return_value=self.version
-        ) as get_version, patch.object(
             component, 'get_or_create'
-        ) as get_or_create, patch.object(
-            component, 'add_version'
-        ) as add_version:
+        ) as get_or_create:
             component.parse()            
             collection_data = {
                 "author": self.user,
@@ -580,7 +571,6 @@ class CollectionsTestCase(TestCase):
                 "name": 'Collection 1',
             }
             self.assertEqual(component.data['collection1'], get_or_create(collection_data))
-    
 
     def test_get_or_create(self):
         # test add

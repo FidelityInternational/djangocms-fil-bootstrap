@@ -25,11 +25,8 @@ class Collections(Component):
             for page in data.get("pages", []):
                 # access pages from bootstrap as if a dict because the __getitem__ method in Bootstrap
                 # allows this and without it mock objects will fail via other access methods.
-                self.add_version(collection, self.get_version(self.bootstrap.pages[page]))
+                self.add_version(collection, get_version(self.bootstrap.pages[page]))
             self.data[name] = collection
-
-    def get_version(self, page):
-        return get_version(page)
 
     def get_or_create(self, collection_data):
         collection, created = ModerationCollection.objects.get_or_create(**collection_data)
