@@ -9,51 +9,28 @@ class Collections(Component):
     default_factory = dict
 
     def parse(self):
-        if not self.raw_data.get("enable", False):
-            return
-        moderator = self.bootstrap.users["moderator"]
-        moderator2 = self.bootstrap.users["moderator2"]
-        moderator3 = self.bootstrap.users["moderator3"]
-        collection1 = ModerationCollection.objects.create(
-            author=moderator,
-            name="Collection 1",
-            workflow=self.bootstrap.workflows["wf4"],
-        )
-        collection1.add_version(get_version(self.bootstrap.pages["page1"]))
-        collection1.add_version(get_version(self.bootstrap.pages["page2"]))
+        """
+        ModerationCollections do not have unique constraints. However, for the purpose of 
+        importing initial data for a project that has djangocms-moderation installed
+        the working assumption is that a combination of the 3 keys: author, workflow and name
+        can be usefully considered to be a unique constraint.  
+        """
+        for name, data in self.raw_data.items():
+            collection_data = {
+                "author": self.bootstrap.users[data["user"]],
+                "workflow": self.bootstrap.workflows[data["workflow"]],
+                "name": data["name"],
+            }
+            collection = self.get_or_create(collection_data)
+            for page in data.get("pages", []):
+                # access pages from bootstrap as if a dict because the __getitem__ method in Bootstrap
+                # allows this and without it mock objects will fail via other access methods.
+                self.add_version(collection, get_version(self.bootstrap.pages[page]))
+            self.data[name] = collection
 
-        collection2 = ModerationCollection.objects.create(
-            author=moderator2,
-            name="Collection 2",
-            workflow=self.bootstrap.workflows["wf4"],
-        )
-        collection2.add_version(get_version(self.bootstrap.pages["page3"]))
-        collection2.add_version(get_version(self.bootstrap.pages["page4"]))
+    def get_or_create(self, collection_data):
+        collection, created = ModerationCollection.objects.get_or_create(**collection_data)
+        return collection
 
-        collection3 = ModerationCollection.objects.create(
-            author=moderator3,
-            name="Collection 3",
-            workflow=self.bootstrap.workflows["wf4"],
-        )
-        collection3.add_version(get_version(self.bootstrap.pages["page5"]))
-
-        collection4 = ModerationCollection.objects.create(
-            author=moderator,
-            name="Collection 4",
-            workflow=self.bootstrap.workflows["wf4"],
-        )
-        collection4.add_version(get_version(self.bootstrap.pages["page6"]))
-
-        collection5 = ModerationCollection.objects.create(
-            author=moderator2,
-            name="Collection 5",
-            workflow=self.bootstrap.workflows["wf4"],
-        )
-        collection5.add_version(get_version(self.bootstrap.pages["page7"]))
-
-        collection6 = ModerationCollection.objects.create(
-            author=moderator3,
-            name="Collection 6",
-            workflow=self.bootstrap.workflows["wf5"],
-        )
-        collection6.add_version(get_version(self.bootstrap.pages["page8"]))
+    def add_version(self, collection, version):
+        collection.add_version(version)

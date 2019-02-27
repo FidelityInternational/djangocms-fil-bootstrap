@@ -1,35 +1,28 @@
 {
     "email_domain": "test.com",
     "groups": {
-        "moderator": {
-            "name": "Moderators"
+        "publisher": {
+            "name": "Publishers"
         },
         "reviewer": {
             "name": "Reviewers"
         },
-        "reviewer2": {
-            "name": "Reviewers 2"
-        },
-        "artworker": {
-            "name": "Artworkers"
+        "editor": {
+            "name": "Editors"
         }
     },
     "roles": {
-        "moderator": {
-            "name": "Moderator Role",
-            "group": "moderator"
+        "publisher": {
+            "name": "Publisher Role",
+            "group": "publisher"
         },
         "reviewer": {
             "name": "Reviewer Role",
             "group": "reviewer"
         },
-        "reviewer2": {
-            "name": "Reviewer Role 2",
-            "group": "reviewer2"
-        },
-        "artworker": {
-            "name": "Artworker Role",
-            "group": "artworker"
+        "editor": {
+            "name": "Editor Role",
+            "group": "editor"
         }
     },
     "permissions": {
@@ -57,7 +50,7 @@
                 "use_structure",
                 "view_page"
             ],
-            "artworker": [
+            "editor": [
                 "change_moderationcollection",
                 "change_moderationrequest",
                 "change_moderationrequestaction",
@@ -67,7 +60,7 @@
                 "view_page",
                 "change_page"
             ],
-            "moderator": [
+            "publisher": [
                 "change_moderationcollection_author",
                 "add_moderationcollection",
                 "change_moderationcollection",
@@ -95,12 +88,16 @@
                 ["add_cms_plugin", "cms", "cmsplugin"],
                 ["change_cms_plugin", "cms", "cmsplugin"],
                 ["delete_cms_plugin", "cms", "cmsplugin"],
+                ["add_page", "cms", "add_globalpagepermission"],
+                ["delete_page", "cms", "delete_globalpagepermission"],
+                ["change_page", "cms", "change_globalpagepermission"],
                 ["add_page", "cms", "page"],
                 ["delete_page", "cms", "page"],
                 "view_page",
                 "change_page",
                 ["publish_page", "cms", "page"],
                 ["edit_static_placeholder", "cms", "page"],
+                ["add_pageadmin", "djangocms_pageadmin", "page"],
                 ["add_aliaspluginmodel", "cms", "aliaspluginmodel"],
                 ["change_aliaspluginmodel", "cms", "aliaspluginmodel"],
                 ["delete_aliaspluginmodel", "cms", "aliaspluginmodel"],

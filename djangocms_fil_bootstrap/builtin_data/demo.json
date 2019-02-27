@@ -5,38 +5,28 @@
             "username": "admin",
             "is_superuser": true
         },
-        "test",
-        "test2",
-        "test3",
-        "moderator",
-        "moderator2",
-        "moderator3",
+        "publisher",
+        "publisher2",
+        "publisher3",
         "reviewer",
         "reviewer2",
         "reviewer3",
         "reviewer4",
         "reviewer5",
         "reviewer6",
-        "artworker"
+        "editor"
     ],
     "groups": {
-        "group1": {
-            "name": "Group 1",
+        "publisher": {
+            "name": "Publishers",
             "users": [
-                "test2",
-                "test3"
-            ]
-        },
-        "moderator": {
-            "name": "Moderator Group",
-            "users": [
-                "moderator",
-                "moderator2",
-                "moderator3"
+                "publisher",
+                "publisher2",
+                "publisher3"
             ]
         },
         "reviewer": {
-            "name": "Reviewer Group",
+            "name": "Reviewers",
             "users": [
                 "reviewer",
                 "reviewer2",
@@ -51,234 +41,30 @@
                 "reviewer6"
             ]
         },
-        "artworker": {
-            "name": "Artworker Group",
+        "editor": {
+            "name": "Editors",
             "users": [
-                "artworker"
+                "editor"
             ]
         }
     },
     "roles": {
-        "role1": {
-            "name": "Role 1",
-            "user": "test"
-        },
-        "role2": {
-            "name": "Role 2",
-            "user": "test2"
-        },
-        "role3": {
-            "name": "Role 3",
-            "group": "group1"
-        },
-        "moderator": {
-            "name": "Moderator Role",
-            "group": "moderator"
-        },
         "reviewer": {
-            "name": "Reviewer Role",
-            "group": "reviewer"
+            "name": "Reviewer Role"
         },
         "reviewer2": {
             "name": "Reviewer Role 2",
             "group": "reviewer2"
         },
-        "artworker": {
-            "name": "Artworker Role",
-            "group": "artworker"
-        }
-    },
-    "permissions": {
-        "aliases": {
-            "change_moderationcollection_author": ["can_change_author", "djangocms_moderation", "moderationcollection"],
-            "add_moderationcollection": ["add_moderationcollection", "djangocms_moderation", "moderationcollection"],
-            "change_moderationcollection": ["change_moderationcollection", "djangocms_moderation", "moderationcollection"],
-            "add_moderationrequest": ["add_moderationrequest", "djangocms_moderation", "moderationrequest"],
-            "change_moderationrequest": ["change_moderationrequest", "djangocms_moderation", "moderationrequest"],
-            "add_moderationrequestaction": ["add_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
-            "change_moderationrequestaction": ["change_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
-            "add_collectioncomment": ["add_collectioncomment", "djangocms_moderation", "collectioncomment"],
-            "change_collectioncomment": ["change_collectioncomment", "djangocms_moderation", "collectioncomment"],
-            "use_structure": ["use_structure", "cms", "placeholder"],
-            "view_page": ["view_page", "cms", "page"],
-            "change_page": ["change_page", "cms", "page"]
+        "reviewer3": {
+            "name": "Reviewer Role 3",
+            "group": "reviewer"
         },
-        "groups": {
-            "reviewer": [
-                "change_moderationcollection",
-                "change_moderationrequest",
-                "change_moderationrequestaction",
-                "add_collectioncomment",
-                "change_collectioncomment",
-                "use_structure",
-                "view_page"
-            ],
-            "artworker": [
-                "change_moderationcollection",
-                "change_moderationrequest",
-                "change_moderationrequestaction",
-                "add_collectioncomment",
-                "change_collectioncomment",
-                "use_structure",
-                "view_page",
-                "change_page"
-            ],
-            "moderator": [
-                "change_moderationcollection_author",
-                "add_moderationcollection",
-                "change_moderationcollection",
-                "add_moderationrequest",
-                "change_moderationrequest",
-                ["delete_moderationrequest", "djangocms_moderation", "moderationrequest"],
-                "add_moderationrequestaction",
-                "change_moderationrequestaction",
-                ["delete_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
-                ["add_workflow", "djangocms_moderation", "workflow"],
-                ["change_workflow", "djangocms_moderation", "workflow"],
-                ["delete_workflow", "djangocms_moderation", "workflow"],
-                "add_collectioncomment",
-                "change_collectioncomment",
-                ["delete_collectioncomment", "djangocms_moderation", "collectioncomment"],
-                ["add_confirmationformsubmission", "djangocms_moderation", "confirmationformsubmission"],
-                ["change_confirmationformsubmission", "djangocms_moderation", "confirmationformsubmission"],
-                ["delete_confirmationformsubmission", "djangocms_moderation", "confirmationformsubmission"],
-                ["add_moderationform", "djangocms_moderation", "moderationform"],
-                ["change_moderationform", "djangocms_moderation", "moderationform"],
-                ["delete_moderationform", "djangocms_moderation", "moderationform"],
-                "use_structure",
-                ["change_staticplaceholder", "cms", "staticplaceholder"],
-                ["delete_staticplaceholder", "cms", "staticplaceholder"],
-                ["add_cms_plugin", "cms", "cmsplugin"],
-                ["change_cms_plugin", "cms", "cmsplugin"],
-                ["delete_cms_plugin", "cms", "cmsplugin"],
-                ["add_page", "cms", "page"],
-                ["delete_page", "cms", "page"],
-                "view_page",
-                "change_page",
-                ["publish_page", "cms", "page"],
-                ["edit_static_placeholder", "cms", "page"],
-                ["add_aliaspluginmodel", "cms", "aliaspluginmodel"],
-                ["change_aliaspluginmodel", "cms", "aliaspluginmodel"],
-                ["delete_aliaspluginmodel", "cms", "aliaspluginmodel"],
-                ["add_text", "djangocms_text_ckeditor", "text"],
-                ["change_text", "djangocms_text_ckeditor", "text"],
-                ["delete_text", "djangocms_text_ckeditor", "text"],
-                ["add_textareafieldplugin", "aldryn_forms", "textareafieldplugin"],
-                ["change_textareafieldplugin", "aldryn_forms", "textareafieldplugin"],
-                ["delete_textareafieldplugin", "aldryn_forms", "textareafieldplugin"],
-                ["add_image", "filer", "image"],
-                ["change_image", "filer", "image"],
-                ["delete_image", "filer", "image"],
-                ["add_url", "djangocms_url_manager", "url"],
-                ["change_url", "djangocms_url_manager", "url"],
-                ["delete_url", "djangocms_url_manager", "url"],
-                ["add_urloverride", "djangocms_url_manager", "urloverride"],
-                ["change_urloverride", "djangocms_url_manager", "urloverride"],
-                ["delete_urloverride", "djangocms_url_manager", "urloverride"],
-                ["add_linkplugin", "djangocms_url_manager", "linkplugin"],
-                ["change_linkplugin", "djangocms_url_manager", "linkplugin"],
-                ["delete_linkplugin", "djangocms_url_manager", "linkplugin"],
-                ["add_style", "djangocms_style", "style"],
-                ["change_style", "djangocms_style", "style"],
-                ["delete_style", "djangocms_style", "style"],
-                ["add_snippet", "djangocms_snippet", "snippet"],
-                ["change_snippet", "djangocms_snippet", "snippet"],
-                ["delete_snippet", "djangocms_snippet", "snippet"],
-                ["add_version", "djangocms_versioning", "version"],
-                ["change_version", "djangocms_versioning", "version"],
-                ["delete_version", "djangocms_versioning", "version"],
-                ["add_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
-                ["change_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
-                ["delete_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
-                ["add_versionlock", "djangocms_version_locking", "versionlock"],
-                ["change_versionlock", "djangocms_version_locking", "versionlock"],
-                ["delete_versionlock", "djangocms_version_locking", "versionlock"]
-            ]
+        "editor": {
+            "name": "Editor Role"
         },
-        "users": {
-            "test": [
-                "change_moderationcollection_author",
-                "add_moderationcollection",
-                "change_moderationcollection",
-                "add_moderationrequest",
-                "change_moderationrequest"
-            ]
-        }
-    },
-    "collections": {
-        "enable": true
-    },
-    "workflows": {
-        "wf1": {
-            "name": "Workflow 1",
-            "is_default": true,
-            "steps": [
-                {
-                    "role": "role1",
-                    "is_required": true,
-                    "order": 1
-                },
-                {
-                    "role": "role2",
-                    "is_required": false,
-                    "order": 2
-                },
-                {
-                    "role": "role3",
-                    "is_required": true,
-                    "order": 3
-                }
-            ]
-        },
-        "wf2": {
-            "name": "Workflow 2",
-            "steps": [
-                {
-                    "role": "role1",
-                    "is_required": true,
-                    "order": 1
-                },
-                {
-                    "role": "role3",
-                    "is_required": true,
-                    "order": 2
-                }
-            ]
-        },
-        "wf3": {
-            "name": "Workflow 3",
-            "steps": [
-                {
-                    "role": "role1",
-                    "is_required": true,
-                    "order": 1
-                },
-                {
-                    "role": "role3",
-                    "is_required": false,
-                    "order": 2
-                }
-            ]
-        },
-        "wf4": {
-            "name": "NCO",
-            "steps": [
-                {
-                    "role": "reviewer",
-                    "is_required": true,
-                    "order": 1
-                }
-            ]
-        },
-        "wf5": {
-            "name": "NCO2",
-            "steps": [
-                {
-                    "role": "reviewer2",
-                    "is_required": true,
-                    "order": 1
-                }
-            ]
+        "publisher": {
+            "name": "Publisher Role"
         }
     },
     "pages": {
@@ -332,13 +118,13 @@
             ]
         },
         "page1": {
-            "title": "Page 1 by test",
+            "title": "Page 1 by editor",
             "template": "INHERIT",
             "language": "en",
-            "created_by": "test",
+            "created_by": "editor",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 },
@@ -348,20 +134,20 @@
                     "can_change": false
                 },
                 {
-                    "user": "artworker",
+                    "user": "editor",
                     "can_view": true,
                     "can_change": true
                 }
             ]
         },
         "page2": {
-            "title": "Page 2 by test2",
+            "title": "Page 2 by publisher2",
             "template": "INHERIT",
             "language": "en",
-            "created_by": "test2",
+            "created_by": "publisher2",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 },
@@ -371,20 +157,20 @@
                     "can_change": false
                 },
                 {
-                    "user": "artworker",
+                    "user": "editor",
                     "can_view": true,
                     "can_change": true
                 }
             ]
         },
         "page3": {
-            "title": "Page 3 by test3",
+            "title": "Page 3 by publisher3",
             "template": "INHERIT",
             "language": "en",
-            "created_by": "test3",
+            "created_by": "publisher3",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 },
@@ -394,20 +180,20 @@
                     "can_change": false
                 },
                 {
-                    "user": "artworker",
+                    "user": "editor",
                     "can_view": true,
                     "can_change": true
                 }
             ]
         },
         "page4": {
-            "title": "Page 4 by test",
+            "title": "Page 4 by editor",
             "template": "INHERIT",
             "language": "en",
-            "created_by": "test",
+            "created_by": "editor",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 },
@@ -417,20 +203,20 @@
                     "can_change": false
                 },
                 {
-                    "user": "artworker",
+                    "user": "editor",
                     "can_view": true,
                     "can_change": true
                 }
             ]
         },
         "page5": {
-            "title": "Page 5 by moderator",
+            "title": "Page 5 by publisher",
             "template": "INHERIT",
             "language": "en",
-            "created_by": "moderator",
+            "created_by": "publisher",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 },
@@ -440,20 +226,20 @@
                     "can_change": false
                 },
                 {
-                    "user": "artworker",
+                    "user": "editor",
                     "can_view": true,
                     "can_change": true
                 }
             ]
         },
         "page6": {
-            "title": "Page 6 by moderator2",
+            "title": "Page 6 by publisher2",
             "template": "INHERIT",
             "language": "en",
-            "created_by": "moderator2",
+            "created_by": "publisher2",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 },
@@ -463,20 +249,20 @@
                     "can_change": false
                 },
                 {
-                    "user": "artworker",
+                    "user": "editor",
                     "can_view": true,
                     "can_change": true
                 }
             ]
         },
         "page7": {
-            "title": "Page 7 by moderator3",
+            "title": "Page 7 by publisher3",
             "template": "INHERIT",
             "language": "en",
-            "created_by": "moderator3",
+            "created_by": "publisher3",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 },
@@ -486,20 +272,20 @@
                     "can_change": false
                 },
                 {
-                    "user": "artworker",
+                    "user": "editor",
                     "can_view": true,
                     "can_change": true
                 }
             ]
         },
         "page8": {
-            "title": "Page 8 by moderator",
+            "title": "Page 8 by publisher",
             "template": "INHERIT",
             "language": "en",
             "created_by": "admin",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 },
@@ -509,20 +295,20 @@
                     "can_change": false
                 },
                 {
-                    "user": "artworker",
+                    "user": "editor",
                     "can_view": true,
                     "can_change": true
                 }
             ]
         },
         "page9": {
-            "title": "Page 9 by admin with permission given to moderator and not yet in collection",
+            "title": "Page 9 by admin with permission given to publisher and not yet in collection",
             "template": "INHERIT",
             "language": "en",
             "created_by": "admin",
             "assignments": [
                 {
-                    "user": "moderator",
+                    "user": "publisher",
                     "can_view": true,
                     "can_change": true
                 }
@@ -533,6 +319,131 @@
             "template": "INHERIT",
             "language": "en",
             "created_by": "admin"
+        }
+    },
+    "workflows": {
+        "wf1": {
+            "name": "Workflow 1",
+            "is_default": true,
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "reviewer2",
+                    "is_required": false,
+                    "order": 2
+                },
+                {
+                    "role": "publisher",
+                    "is_required": true,
+                    "order": 3
+                }
+            ]
+        },
+        "wf2": {
+            "name": "Workflow 2",
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "publisher",
+                    "is_required": true,
+                    "order": 2
+                }
+            ]
+        },
+        "wf3": {
+            "name": "Workflow 3",
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                },
+                {
+                    "role": "publisher",
+                    "is_required": false,
+                    "order": 2
+                }
+            ]
+        },
+        "wf4": {
+            "name": "NCO",
+            "steps": [
+                {
+                    "role": "reviewer",
+                    "is_required": true,
+                    "order": 1
+                }
+            ]
+        },
+        "wf5": {
+            "name": "NCO2",
+            "steps": [
+                {
+                    "role": "reviewer2",
+                    "is_required": true,
+                    "order": 1
+                }
+            ]
+        }
+    },
+    "collections": {
+        "collection1": {
+            "user": "publisher",
+            "name": "Collection 1",
+            "workflow": "wf4",
+            "pages": [
+                "page1",
+                "page2"
+            ]
+        },
+        "collection2": {
+            "user": "publisher2",
+            "name": "Collection 2",
+            "workflow": "wf4",
+            "pages": [
+                "page3",
+                "page4"
+            ]
+        },
+        "collection3": {
+            "user": "publisher3",
+            "name": "Collection 3",
+            "workflow": "wf4",
+            "pages": [
+                "page5"
+            ]
+        },
+        "collection4": {
+            "user": "publisher",
+            "name": "Collection 4",
+            "workflow": "wf4",
+            "pages": [
+                "page6"
+            ]
+        },
+        "collection5": {
+            "user": "publisher2",
+            "name": "Collection 5",
+            "workflow": "wf4",
+            "pages": [
+                "page7"
+            ]
+        },
+        "collection6": {
+            "user": "publisher3",
+            "name": "Collection 6",
+            "workflow": "wf5",
+            "pages": [
+                "page8"
+            ]
         }
     }
 }

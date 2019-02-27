@@ -8,10 +8,10 @@ from .workflows import Workflows
 
 __all__ = [
     "Component",
-    "Collections",
     "Groups",
     "Pages",
     "Permissions",
     "Users",
     "Workflows",
+    "Collections",
 ]
