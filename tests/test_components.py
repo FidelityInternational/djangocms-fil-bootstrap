@@ -539,7 +539,7 @@ class CollectionsTestCase(TestCase):
         self.bootstrap = Mock(users={"user1": self.user}, workflows={"wf1": self.wf1}, pages={"page1": self.page1})
         self.component = Collections(self.bootstrap)
 
-    def test_parse(self):
+    def test_parse_generates_and_stores_collection(self):
         """
         Test that parsing is able to call the Collection.get_or_create method
         """
@@ -556,6 +556,13 @@ class CollectionsTestCase(TestCase):
             component.parse()
             get_or_create.assert_called_once_with({'workflow': self.wf1, 'name': 'Collection 1', 'author': self.user})
             
+            collection_data = {
+                "author": self.user,
+                "workflow": self.wf1,
+                "name": 'Collection 1',
+            }
+            self.assertEqual(component.data['collection1'], get_or_create(collection_data))
+    
 
     def test_get_or_create(self):
         # test add
