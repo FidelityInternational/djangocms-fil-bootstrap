@@ -83,9 +83,21 @@ python component
     djangocms_fil_bootstrap.bootstrap`.
 
 
-Data structure
+Structure of the JSON files
 ==============
-Note that it is possible to conform to DRY principles *to a degree*. If you wish to accumulate data, then records in later files will still need to be defined but they do not require all the data to be present, providing that your component uses `get_or_create` when generating new records.
+There is both utlity and difficulty in separating your required data into separate files. The utility is that you may have different environments that require different subsets of data – for example (as shown in the built_in data folder) you may wish to injet roles, groups and permissions to both your test and prod environments but you may only wish to inject your demo data to the test environmenty. However, because of the relational nature of the Django models, there may be dependencies between these two files.
+
+There are two ways you can handle this:
+
+A) Repeat all the dependent data completely in both files
+
+B) Repeat only the unique identifiers in the later files
+If you wish to accumulate data, then records in later files will still need to be defined but they do not require all the data to be present, providing that your component uses `get_or_create` when generating new records.
+
+Thus, if you intend to run multiple data files in sequence and there is overlap in the data between these files, it is possible to conform to DRY principles *to a degree*. (DRY = Don't Repeat Yourself and here it applies to the codified data in the JSON files). 
+
+This can be useful so that you don't have to replicate changes across multiple files
+
 
 E.g. Let's say you have two json files to import: `roles.json` and `demo.json`. You may define all the permissions and roles in the first file. Any records which may be required in the second just need their unique identifier property, so that `get_or_create` will execute a SELECT instead of an INSERT.
 
