@@ -536,10 +536,30 @@ class CollectionsTestCase(TestCase):
         self.wf1 = Workflow.objects.create(name="Workflow 1")
         self.version = PageVersionFactory()
         self.page1 = self.version.content.page
-        self.bootstrap = Mock(users={"user1": self.user}, workflows={"wf1": self.wf1}, pages={"page1": self.page1})
+        self.version2 = PageVersionFactory()
+        self.page2 = self.version2.content.page
+        self.bootstrap = Mock(users={"user1": self.user}, workflows={"wf1": self.wf1}, pages={"page1": self.page1, "page2": self.page2})
         self.component = Collections(self.bootstrap)
 
-    def test_parse_generates_and_stores_collection(self):
+    def test_parse_generates_collection(self):
+        """
+        Test that parsing is able to call the Collection.get_or_create method
+        """
+        component = self.component
+        component.raw_data = {'collection1': {'pages': ['page1', 'page2'], 'name': 'Collection 1', 'user': 'user1', 'workflow': 'wf1'}}            
+
+        with patch.object(
+            component, 'get_version', return_value=self.version
+        ) as get_version, patch.object(
+            component, 'get_or_create'
+        ) as get_or_create, patch.object(
+            component, 'add_version'
+        ) as add_version:
+            component.parse()
+            get_or_create.assert_called_once_with({'workflow': self.wf1, 'name': 'Collection 1', 'author': self.user})
+              
+
+    def test_parse_stores_collection(self):
         """
         Test that parsing is able to call the Collection.get_or_create method
         """
@@ -553,9 +573,7 @@ class CollectionsTestCase(TestCase):
         ) as get_or_create, patch.object(
             component, 'add_version'
         ) as add_version:
-            component.parse()
-            get_or_create.assert_called_once_with({'workflow': self.wf1, 'name': 'Collection 1', 'author': self.user})
-            
+            component.parse()            
             collection_data = {
                 "author": self.user,
                 "workflow": self.wf1,
