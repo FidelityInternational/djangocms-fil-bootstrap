@@ -145,7 +145,6 @@ class UsersTestCase(TestCase):
         self.assertEqual(result["is_staff"], True)
         self.assertNotIn("foo", result)
 
-
     def test_prepare_each_dict(self):
         """
         Check what data is prepared by prepare_each function
@@ -193,7 +192,9 @@ class GroupsTestCase(TestCase):
         self.assertIn("foo", component.data)
         group = component.data["foo"]
         self.assertEqual(group.name, "visible name")
-        add_user_to_group.assert_has_calls([call(group, "user1"), call(group, "user2")], any_order=True)
+        add_user_to_group.assert_has_calls(
+            [call(group, "user1"), call(group, "user2")], any_order=True
+        )
 
 
 class PermissionsTestCase(TestCase):
@@ -227,7 +228,8 @@ class PermissionsTestCase(TestCase):
         ) as resolve_alias:
             result = list(component.resolve_aliases(perms, aliases))
         resolve_alias.assert_has_calls(
-            [call(perms[0], aliases), call(perms[1], aliases), call(perms[2], aliases)], any_order=True
+            [call(perms[0], aliases), call(perms[1], aliases), call(perms[2], aliases)],
+            any_order=True,
         )
         self.assertEqual(result, side_effects)
 
@@ -332,7 +334,8 @@ class PagesTestCase(TestCase):
                     target=add_plugin.return_value,
                     child_data="bar",
                 ),
-            ], any_order=True
+            ],
+            any_order=True,
         )
 
     def test_parse(self):
@@ -340,7 +343,9 @@ class PagesTestCase(TestCase):
         component.raw_data = {"page1": "bar", "page2": "baz"}
         with patch.object(component, "each") as each:
             component.parse()
-        each.assert_has_calls([call("page1", "bar"), call("page2", "baz")], any_order=True)
+        each.assert_has_calls(
+            [call("page1", "bar"), call("page2", "baz")], any_order=True
+        )
 
     def test_each(self):
         user = UserFactory()
@@ -522,7 +527,8 @@ class WorkflowsTestCase(TestCase):
             [
                 call("wf1", {"name": "Workflow 1"}, roles),
                 call("wf2", {"name": "Workflow 2"}, roles),
-            ], any_order=True
+            ],
+            any_order=True,
         )
 
     def test_parse(self):
