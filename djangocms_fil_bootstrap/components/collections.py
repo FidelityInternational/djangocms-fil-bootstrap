@@ -19,20 +19,10 @@ class Collections(Component):
             collection_data = {
                 "author": self.bootstrap.users[data["user"]],
                 "workflow": self.bootstrap.workflows[data["workflow"]],
-                "name": data["name"],
             }
-            collection = self.get_or_create(collection_data)
-            for page in data.get("pages", []):
-                # access pages from bootstrap as if a dict because the __getitem__ method in Bootstrap
-                # allows this and without it mock objects will fail via other access methods.
-                self.add_version(collection, get_version(self.bootstrap.pages[page]))
+            collection, created = ModerationCollection.objects.get_or_create(
+                name=data["name"], defaults=collection_data)
+            if created:
+                for page in data.get("pages", []):
+                    collection.add_version(get_version(self.bootstrap.pages[page]))
             self.data[name] = collection
-
-    def get_or_create(self, collection_data):
-        collection, created = ModerationCollection.objects.get_or_create(
-            **collection_data
-        )
-        return collection
-
-    def add_version(self, collection, version):
-        collection.add_version(version)

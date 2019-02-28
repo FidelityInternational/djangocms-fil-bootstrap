@@ -9,6 +9,7 @@ from cms.models import Page, PageContent, Placeholder, TreeNode
 import factory
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
+from djangocms_moderation.models import ModerationCollection, Workflow
 from djangocms_versioning.models import Version
 
 
@@ -96,6 +97,17 @@ class PageVersionFactory(AbstractVersionFactory):
         model = Version
 
 
+class PageContentWithVersionFactory(PageContentFactory):
+    @factory.post_generation
+    def version(self, create, extracted, **kwargs):
+        # NOTE: Use this method as below to define version attributes:
+        # PageContentWithVersionFactory(version__label='label1')
+        if not create:
+            # Simple build, do nothing.
+            return
+        PageVersionFactory(content=self, **kwargs)
+
+
 class PlaceholderFactory(factory.django.DjangoModelFactory):
     default_width = FuzzyInteger(0, 25)
     slot = FuzzyText(length=2, chars=string.digits)
@@ -104,3 +116,19 @@ class PlaceholderFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Placeholder
+
+
+class WorkflowFactory(factory.django.DjangoModelFactory):
+    name = FuzzyText(length=12)
+
+    class Meta:
+        model = Workflow
+
+
+class ModerationCollectionFactory(factory.django.DjangoModelFactory):
+    name = FuzzyText(length=12)
+    author = factory.SubFactory(UserFactory)
+    workflow = factory.SubFactory(WorkflowFactory)
+
+    class Meta:
+        model = ModerationCollection
