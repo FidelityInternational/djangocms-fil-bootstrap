@@ -25,7 +25,7 @@ from djangocms_fil_bootstrap.test_utils.factories import (
 )
 from djangocms_fil_bootstrap.utils import get_version
 from djangocms_moderation.models import ModerationCollection, ModerationRequest, Role, Workflow
-from djangocms_versioning.constants import DRAFT, PUBLISHED
+from djangocms_versioning.constants import DRAFT, PUBLISHED, ARCHIVED
 
 
 class TestComponent(Component):
@@ -543,27 +543,37 @@ class WorkflowsTestCase(TestCase):
 
 class CollectionsTestCase(TestCase):
     def setUp(self):
-        self.user = UserFactory(username="user1")
-        self.wf1 = Workflow.objects.create(name="Workflow 1")
-        self.version = PageVersionFactory()
-        self.page1 = self.version.content.page
-        self.version2 = PageVersionFactory()
-        self.page2 = self.version2.content.page
-        self.bootstrap = Mock(users={"user1": self.user}, workflows={"wf1": self.wf1}, pages={"page1": self.page1, "page2": self.page2})
-        self.component = Collections(self.bootstrap)
+        self.user = UserFactory(username='user1')
+        self.wf1 = Workflow.objects.create()
 
-    @freeze_time()
-    def test_parse_creates_collection_in_db(self):
-        """If the ModerationCollection doesn't exist, a new instance gets created in the db"""
-        component = self.component
+    def _get_collections_obj(self, pages=None):
+        """Helper method to set up the Collections object instance"""
+        if not pages:
+            pages = {
+                "page1": PageContentWithVersionFactory().page,
+                "page2": PageContentWithVersionFactory().page,
+            }
+        bootstrap = Mock(
+            users={"user1": self.user},
+            workflows={"wf1": self.wf1},
+            pages=pages
+        )
+        component = Collections(bootstrap)
         component.raw_data = {
             'collection1': {
-                'pages': ['page1', 'page2'],
+                'pages': pages.keys(),
                 'name': 'Collection 1',
                 'user': 'user1',
                 'workflow': 'wf1'
             }
         }
+        return component
+
+    @freeze_time()
+    def test_parse_creates_collection_in_db(self):
+        """If the ModerationCollection doesn't exist, a new instance
+        should be created in the db"""
+        component = self._get_collections_obj()
 
         component.parse()
 
@@ -580,20 +590,12 @@ class CollectionsTestCase(TestCase):
         self.assertEqual(collection.date_modified, now())
 
     def test_parse_does_not_create_collection_if_already_exists(self):
-        """If a ModerationCollection with that name exists, nothing should change"""
+        """If a ModerationCollection with that name exists, it should not change"""
         from djangocms_moderation.constants import IN_REVIEW
         with freeze_time('2010-10-10'):
             existing_collection = ModerationCollectionFactory(
                 name='Collection 1', status=IN_REVIEW)
-        component = self.component
-        component.raw_data = {
-            'collection1': {
-                'pages': ['page1', 'page2'],
-                'name': 'Collection 1',
-                'user': 'user1',
-                'workflow': 'wf1'
-            }
-        }
+        component = self._get_collections_obj()
 
         component.parse()
 
@@ -607,93 +609,61 @@ class CollectionsTestCase(TestCase):
 
     @freeze_time()
     def test_parse_adds_moderation_request(self):
+        """If a ModerationCollection with that name doesn't exist, create
+        moderation requests from the specified pages."""
         with freeze_time('2010-10-10'):
             # The version on this page is old
-            page = PageContentWithVersionFactory(version__state='archived').page
-        # A second, much newer version
-        version = PageVersionFactory(content__page=page)
-        bootstrap = Mock(
-            users={"user1": self.user},
-            workflows={"wf1": self.wf1},
-            pages={"page1": page},
-        )
-        component = Collections(bootstrap)
-        component.raw_data = {
-            'collection1': {
-                'pages': ['page1'],
-                'name': 'Collection 1',
-                'user': 'user1',
-                'workflow': 'wf1'
-            }
-        }
+            page = PageContentWithVersionFactory(version__state=ARCHIVED).page
+        version = PageVersionFactory(content__page=page)  # newer version
+        component = self._get_collections_obj(pages={"page1": page})
 
         component.parse()
 
-        request = ModerationRequest.objects.get()
+        request = ModerationRequest.objects.get()  # newly created request
         self.assertEqual(request.collection.name, 'Collection 1')
-        # TODO: This should be equal to the latest version but is not
-        # Temporarily testing it is equal to the old version even though
-        # this is wrong.
+        # TODO: This should probably be equal to the latest version but
+        # is not. Temporarily testing it is equal to the old version until
+        # we confirm this should be fixed
         from djangocms_versioning.models import Version
-        old_version = Version.objects.get(state='archived')
+        old_version = Version.objects.get(state=ARCHIVED)
         self.assertEqual(request.version, old_version)
         # self.assertEqual(request.version, version)
         self.assertEqual(request.author, self.user)
+        # It appears the language field is not currently used by
+        # moderation, hence probably why this is left empty
         self.assertEqual(request.language, '')
         self.assertTrue(request.is_active)
+        # TODO: Should this default to the date of the import?
         self.assertEqual(request.date_sent, now())
 
     def test_parse_does_not_add_moderation_request_if_collection_already_exists(self):
+        """If a ModerationCollection with that name exists, do not add any
+        moderation requests to it."""
         existing_collection = ModerationCollectionFactory(name='Collection 1')
-        page = PageContentWithVersionFactory(version__state='archived').page
-        bootstrap = Mock(
-            users={"user1": self.user},
-            workflows={"wf1": self.wf1},
-            pages={"page1": page},
-        )
-        component = Collections(bootstrap)
-        component.raw_data = {
-            'collection1': {
-                'pages': ['page1'],
-                'name': 'Collection 1',
-                'user': 'user1',
-                'workflow': 'wf1'
-            }
-        }
+        page = PageContentWithVersionFactory().page
+        component = self._get_collections_obj(pages={"page1": page})
 
         component.parse()
 
-        # TODO: Discussed with Riz that this should probably be expected
-        # behaviour. But need to verify with Krzysztof
+        # TODO: Discussed with Riz that this should probably be the expected
+        # behaviour and have amended the code. But need to verify with Krzysztof
         self.assertEqual(ModerationRequest.objects.count(), 0)
 
     def test_parse_adds_collection_to_data(self):
-        component = self.component
-        component.raw_data = {
-            'collection1': {
-                'pages': ['page1', 'page2'],
-                'name': 'Collection 1',
-                'user': 'user1',
-                'workflow': 'wf1'
-            }
-        }
+        """If the ModerationCollection does not exist, it should be
+        assigned to the data dict."""
+        component = self._get_collections_obj()
 
         component.parse()
 
-        collection = ModerationCollection.objects.get()
+        collection = ModerationCollection.objects.get()  # newly created collection
         self.assertDictEqual(component.data, {'collection1': collection})
 
-    def test_parse_adds_collection_to_data_if_collection_previously_existed(self):
+    def test_parse_adds_collection_to_data_if_collection_already_exists(self):
+        """If the ModerationCollection object already exists, it should be
+        assigned to the data dict the same way as newly created objects."""
         existing_collection = ModerationCollectionFactory(name='Collection 1')
-        component = self.component
-        component.raw_data = {
-            'collection1': {
-                'pages': ['page1', 'page2'],
-                'name': 'Collection 1',
-                'user': 'user1',
-                'workflow': 'wf1'
-            }
-        }
+        component = self._get_collections_obj()
 
         component.parse()
 

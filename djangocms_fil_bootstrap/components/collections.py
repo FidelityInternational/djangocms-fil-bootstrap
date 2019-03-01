@@ -9,11 +9,9 @@ class Collections(Component):
     default_factory = dict
 
     def parse(self):
-        """
-        ModerationCollections do not have unique constraints. However, for the purpose of 
-        importing initial data for a project that has djangocms-moderation installed
-        the working assumption is that a combination of the 3 keys: author, workflow and name
-        can be usefully considered to be a unique constraint.  
+        """Create ModerationCollection objects from the dict data. If
+        a ModerationCollection object with the specified name attribute
+        already exists in the db, do not change it.
         """
         for name, data in self.raw_data.items():
             collection_data = {
