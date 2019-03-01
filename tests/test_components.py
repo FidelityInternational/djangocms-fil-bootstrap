@@ -560,11 +560,11 @@ class CollectionsTestCase(TestCase):
         )
         component = Collections(bootstrap)
         component.raw_data = {
-            'collection1': {
-                'pages': pages.keys(),
-                'name': 'Collection 1',
-                'user': 'user1',
-                'workflow': 'wf1'
+            "collection1": {
+                "pages": pages.keys(),
+                "name": "Collection 1",
+                "user": "user1",
+                "workflow": "wf1"
             }
         }
         return component
@@ -592,9 +592,9 @@ class CollectionsTestCase(TestCase):
     def test_parse_does_not_create_collection_if_already_exists(self):
         """If a ModerationCollection with that name exists, it should not change"""
         from djangocms_moderation.constants import IN_REVIEW
-        with freeze_time('2010-10-10'):
+        with freeze_time("2010-10-10"):
             existing_collection = ModerationCollectionFactory(
-                name='Collection 1', status=IN_REVIEW)
+                name="Collection 1", status=IN_REVIEW)
         component = self._get_collections_obj()
 
         component.parse()
@@ -611,7 +611,7 @@ class CollectionsTestCase(TestCase):
     def test_parse_adds_moderation_request(self):
         """If a ModerationCollection with that name doesn't exist, create
         moderation requests from the specified pages."""
-        with freeze_time('2010-10-10'):
+        with freeze_time("2010-10-10"):
             # The version on this page is old
             page = PageContentWithVersionFactory(version__state=ARCHIVED).page
         version = PageVersionFactory(content__page=page)  # newer version
@@ -620,7 +620,7 @@ class CollectionsTestCase(TestCase):
         component.parse()
 
         request = ModerationRequest.objects.get()  # newly created request
-        self.assertEqual(request.collection.name, 'Collection 1')
+        self.assertEqual(request.collection.name, "Collection 1")
         # TODO: This should probably be equal to the latest version but
         # is not. Temporarily testing it is equal to the old version until
         # we confirm this should be fixed
@@ -631,7 +631,7 @@ class CollectionsTestCase(TestCase):
         self.assertEqual(request.author, self.user)
         # It appears the language field is not currently used by
         # moderation, hence probably why this is left empty
-        self.assertEqual(request.language, '')
+        self.assertEqual(request.language, "")
         self.assertTrue(request.is_active)
         # TODO: Should this default to the date of the import?
         self.assertEqual(request.date_sent, now())
@@ -639,7 +639,7 @@ class CollectionsTestCase(TestCase):
     def test_parse_does_not_add_moderation_request_if_collection_already_exists(self):
         """If a ModerationCollection with that name exists, do not add any
         moderation requests to it."""
-        existing_collection = ModerationCollectionFactory(name='Collection 1')
+        existing_collection = ModerationCollectionFactory(name="Collection 1")
         page = PageContentWithVersionFactory().page
         component = self._get_collections_obj(pages={"page1": page})
 
@@ -657,14 +657,14 @@ class CollectionsTestCase(TestCase):
         component.parse()
 
         collection = ModerationCollection.objects.get()  # newly created collection
-        self.assertDictEqual(component.data, {'collection1': collection})
+        self.assertDictEqual(component.data, {"collection1": collection})
 
     def test_parse_adds_collection_to_data_if_collection_already_exists(self):
         """If the ModerationCollection object already exists, it should be
         assigned to the data dict the same way as newly created objects."""
-        existing_collection = ModerationCollectionFactory(name='Collection 1')
+        existing_collection = ModerationCollectionFactory(name="Collection 1")
         component = self._get_collections_obj()
 
         component.parse()
 
-        self.assertDictEqual(component.data, {'collection1': existing_collection})
+        self.assertDictEqual(component.data, {"collection1": existing_collection})
