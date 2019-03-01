@@ -605,7 +605,7 @@ class CollectionsTestCase(TestCase):
         self.assertEqual(collection.workflow, existing_collection.workflow)
         self.assertEqual(collection.status, existing_collection.status)
         self.assertEqual(collection.date_created, existing_collection.date_created)
-        self.assertEqual(collection.date_created, existing_collection.date_modified)
+        self.assertEqual(collection.date_modified, existing_collection.date_modified)
 
     @freeze_time()
     def test_parse_adds_moderation_request(self):
@@ -645,8 +645,6 @@ class CollectionsTestCase(TestCase):
 
         component.parse()
 
-        # TODO: Discussed with Riz that this should probably be the expected
-        # behaviour and have amended the code. But need to verify with Krzysztof
         self.assertEqual(ModerationRequest.objects.count(), 0)
 
     def test_parse_adds_collection_to_data(self):
