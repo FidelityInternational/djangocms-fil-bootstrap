@@ -7,9 +7,9 @@ from django.contrib.sites.models import Site
 from cms.models import Page, PageContent, Placeholder, TreeNode
 
 import factory
+from djangocms_moderation.models import ModerationCollection, Workflow
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
-from djangocms_moderation.models import ModerationCollection, Workflow
 from djangocms_versioning.models import Version
 
 

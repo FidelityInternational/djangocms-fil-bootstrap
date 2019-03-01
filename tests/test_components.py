@@ -1,8 +1,14 @@
-from unittest.mock import MagicMock, Mock, call, patch
+from unittest.mock import Mock, call, patch
 
 from django.test import TestCase
 from django.utils.timezone import now
 
+from djangocms_moderation.models import (
+    ModerationCollection,
+    ModerationRequest,
+    Role,
+    Workflow,
+)
 from freezegun import freeze_time
 
 from djangocms_fil_bootstrap.components import (
@@ -14,7 +20,10 @@ from djangocms_fil_bootstrap.components import (
     Workflows,
 )
 from djangocms_fil_bootstrap.components.base import Component
-from djangocms_fil_bootstrap.components.permissions import codename, natural_key
+from djangocms_fil_bootstrap.components.permissions import (
+    codename,
+    natural_key,
+)
 from djangocms_fil_bootstrap.test_utils.factories import (
     GroupFactory,
     ModerationCollectionFactory,
@@ -24,8 +33,7 @@ from djangocms_fil_bootstrap.test_utils.factories import (
     UserFactory,
 )
 from djangocms_fil_bootstrap.utils import get_version
-from djangocms_moderation.models import ModerationCollection, ModerationRequest, Role, Workflow
-from djangocms_versioning.constants import DRAFT, PUBLISHED, ARCHIVED
+from djangocms_versioning.constants import ARCHIVED, DRAFT, PUBLISHED
 
 
 class TestComponent(Component):
@@ -38,7 +46,7 @@ class TestComponent(Component):
 class BaseTestCase(TestCase):
     def test_keeps_bootstrap(self):
         """
-        Checks that if you pass the bootstrap component as a parameter, 
+        Checks that if you pass the bootstrap component as a parameter,
         that it saves it as bootstrap attribute inside that component
         Assertion tests that boostrap is accessible
         """
@@ -48,7 +56,7 @@ class BaseTestCase(TestCase):
 
     def test_call_keeps_raw_data(self):
         """
-        Checks what happens when you call the object, 
+        Checks what happens when you call the object,
         that it saves the passed parameter as raw_data attribute inside that component
         Assertion tests that boostrap is accessible
         """
@@ -68,7 +76,7 @@ class BaseTestCase(TestCase):
     def test_call_calls_default_factory_if_input_is_none(self):
         """
         If nothing is passed when calling the component, test that a default is created via a factory.
-        This prevents raw_data from having a None value. 
+        This prevents raw_data from having a None value.
         """
         factory = Mock(return_value="data from factory")
         FactoryTestComponent = type(
@@ -93,10 +101,10 @@ class BaseTestCase(TestCase):
 class UsersTestCase(TestCase):
     def test_parse(self):
         """
-        Test the parse method directly (not implicitly), thus instead of component("foo"), 
+        Test the parse method directly (not implicitly), thus instead of component("foo"),
         set raw_data explicitly and call parse manually.
         Checks that prepare_each is called using the raw_data value
-        Checks that each is called with the return value of prepare_each 
+        Checks that each is called with the return value of prepare_each
         """
         component = Users(Mock())
         component.raw_data = ["foo"]
@@ -130,8 +138,8 @@ class UsersTestCase(TestCase):
         """
         Check what data is prepared by prepare_each function
         Here it tests passing a string and fills in any blank expected keys.
-        return_value="domain" is because: here we are mocking the entire 
-        data function and always returns domain, so that we can know that 
+        return_value="domain" is because: here we are mocking the entire
+        data function and always returns domain, so that we can know that
         the email data value will be and so that we can check that the data()
         method is being used to get this value.
         """
@@ -639,7 +647,7 @@ class CollectionsTestCase(TestCase):
     def test_parse_does_not_add_moderation_request_if_collection_already_exists(self):
         """If a ModerationCollection with that name exists, do not add any
         moderation requests to it."""
-        existing_collection = ModerationCollectionFactory(name="Collection 1")
+        ModerationCollectionFactory(name="Collection 1")
         page = PageContentWithVersionFactory().page
         component = self._get_collections_obj(pages={"page1": page})
 
