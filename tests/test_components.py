@@ -3,6 +3,7 @@ from unittest.mock import Mock, call, patch
 from django.test import TestCase
 from django.utils.timezone import now
 
+from djangocms_moderation.constants import COLLECTING, IN_REVIEW
 from djangocms_moderation.models import (
     ModerationCollection,
     ModerationRequest,
@@ -20,10 +21,7 @@ from djangocms_fil_bootstrap.components import (
     Workflows,
 )
 from djangocms_fil_bootstrap.components.base import Component
-from djangocms_fil_bootstrap.components.permissions import (
-    codename,
-    natural_key,
-)
+from djangocms_fil_bootstrap.components.permissions import codename, natural_key
 from djangocms_fil_bootstrap.test_utils.factories import (
     GroupFactory,
     ModerationCollectionFactory,
@@ -551,7 +549,7 @@ class WorkflowsTestCase(TestCase):
 
 class CollectionsTestCase(TestCase):
     def setUp(self):
-        self.user = UserFactory(username='user1')
+        self.user = UserFactory(username="user1")
         self.wf1 = Workflow.objects.create()
 
     def _get_collections_obj(self, pages=None):
@@ -562,9 +560,7 @@ class CollectionsTestCase(TestCase):
                 "page2": PageContentWithVersionFactory().page,
             }
         bootstrap = Mock(
-            users={"user1": self.user},
-            workflows={"wf1": self.wf1},
-            pages=pages
+            users={"user1": self.user}, workflows={"wf1": self.wf1}, pages=pages
         )
         component = Collections(bootstrap)
         component.raw_data = {
@@ -572,7 +568,7 @@ class CollectionsTestCase(TestCase):
                 "pages": pages.keys(),
                 "name": "Collection 1",
                 "user": "user1",
-                "workflow": "wf1"
+                "workflow": "wf1",
             }
         }
         return component
@@ -589,20 +585,16 @@ class CollectionsTestCase(TestCase):
         self.assertEqual(collection.name, "Collection 1")
         self.assertEqual(collection.author, self.user)
         self.assertEqual(collection.workflow, self.wf1)
-        # TODO: Is it correct that all collections created with json
-        # will always be in COLLECTING state and have created/modified
-        # dates set to now?
-        from djangocms_moderation.constants import COLLECTING
         self.assertEqual(collection.status, COLLECTING)
         self.assertEqual(collection.date_created, now())
         self.assertEqual(collection.date_modified, now())
 
     def test_parse_does_not_create_collection_if_already_exists(self):
         """If a ModerationCollection with that name exists, it should not change"""
-        from djangocms_moderation.constants import IN_REVIEW
         with freeze_time("2010-10-10"):
             existing_collection = ModerationCollectionFactory(
-                name="Collection 1", status=IN_REVIEW)
+                name="Collection 1", status=IN_REVIEW
+            )
         component = self._get_collections_obj()
 
         component.parse()
@@ -629,13 +621,7 @@ class CollectionsTestCase(TestCase):
 
         request = ModerationRequest.objects.get()  # newly created request
         self.assertEqual(request.collection.name, "Collection 1")
-        # TODO: This should probably be equal to the latest version but
-        # is not. Temporarily testing it is equal to the old version until
-        # we confirm this should be fixed
-        from djangocms_versioning.models import Version
-        old_version = Version.objects.get(state=ARCHIVED)
-        self.assertEqual(request.version, old_version)
-        # self.assertEqual(request.version, version)
+        self.assertEqual(request.version, version)
         self.assertEqual(request.author, self.user)
         # It appears the language field is not currently used by
         # moderation, hence probably why this is left empty
