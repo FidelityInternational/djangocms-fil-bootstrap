@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from djangocms_versioning.constants import ARCHIVED, UNPUBLISHED
+from djangocms_versioning.constants import ARCHIVED
 from freezegun import freeze_time
 
 from djangocms_fil_bootstrap.test_utils.factories import (
