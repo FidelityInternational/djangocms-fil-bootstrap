@@ -9,30 +9,18 @@ class Collections(Component):
     default_factory = dict
 
     def parse(self):
-        """
-        ModerationCollections do not have unique constraints. However, for the purpose of 
-        importing initial data for a project that has djangocms-moderation installed
-        the working assumption is that a combination of the 3 keys: author, workflow and name
-        can be usefully considered to be a unique constraint.  
+        """Create ModerationCollection objects from the dict data. If
+        a ModerationCollection object with the specified name attribute
+        already exists in the db, do not change it.
         """
         for name, data in self.raw_data.items():
             collection_data = {
                 "author": self.bootstrap.users[data["user"]],
                 "workflow": self.bootstrap.workflows[data["workflow"]],
-                "name": data["name"],
             }
-            collection = self.get_or_create(collection_data)
-            for page in data.get("pages", []):
-                # access pages from bootstrap as if a dict because the __getitem__ method in Bootstrap
-                # allows this and without it mock objects will fail via other access methods.
-                self.add_version(collection, get_version(self.bootstrap.pages[page]))
+            collection, created = ModerationCollection.objects.get_or_create(
+                name=data["name"], defaults=collection_data)
+            if created:
+                for page in data.get("pages", []):
+                    collection.add_version(get_version(self.bootstrap.pages[page]))
             self.data[name] = collection
-
-    def get_or_create(self, collection_data):
-        collection, created = ModerationCollection.objects.get_or_create(
-            **collection_data
-        )
-        return collection
-
-    def add_version(self, collection, version):
-        collection.add_version(version)

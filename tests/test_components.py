@@ -1,6 +1,16 @@
-from unittest.mock import MagicMock, Mock, call, patch
+from unittest.mock import Mock, call, patch
 
 from django.test import TestCase
+from django.utils.timezone import now
+
+from djangocms_moderation.constants import COLLECTING, IN_REVIEW
+from djangocms_moderation.models import (
+    ModerationCollection,
+    ModerationRequest,
+    Role,
+    Workflow,
+)
+from freezegun import freeze_time
 
 from djangocms_fil_bootstrap.components import (
     Collections,
@@ -14,13 +24,14 @@ from djangocms_fil_bootstrap.components.base import Component
 from djangocms_fil_bootstrap.components.permissions import codename, natural_key
 from djangocms_fil_bootstrap.test_utils.factories import (
     GroupFactory,
+    ModerationCollectionFactory,
+    PageContentWithVersionFactory,
     PageVersionFactory,
     PlaceholderFactory,
     UserFactory,
 )
 from djangocms_fil_bootstrap.utils import get_version
-from djangocms_moderation.models import ModerationCollection, Role, Workflow
-from djangocms_versioning.constants import DRAFT, PUBLISHED
+from djangocms_versioning.constants import ARCHIVED, DRAFT, PUBLISHED
 
 
 class TestComponent(Component):
@@ -33,7 +44,7 @@ class TestComponent(Component):
 class BaseTestCase(TestCase):
     def test_keeps_bootstrap(self):
         """
-        Checks that if you pass the bootstrap component as a parameter, 
+        Checks that if you pass the bootstrap component as a parameter,
         that it saves it as bootstrap attribute inside that component
         Assertion tests that boostrap is accessible
         """
@@ -43,7 +54,7 @@ class BaseTestCase(TestCase):
 
     def test_call_keeps_raw_data(self):
         """
-        Checks what happens when you call the object, 
+        Checks what happens when you call the object,
         that it saves the passed parameter as raw_data attribute inside that component
         Assertion tests that boostrap is accessible
         """
@@ -63,7 +74,7 @@ class BaseTestCase(TestCase):
     def test_call_calls_default_factory_if_input_is_none(self):
         """
         If nothing is passed when calling the component, test that a default is created via a factory.
-        This prevents raw_data from having a None value. 
+        This prevents raw_data from having a None value.
         """
         factory = Mock(return_value="data from factory")
         FactoryTestComponent = type(
@@ -88,10 +99,10 @@ class BaseTestCase(TestCase):
 class UsersTestCase(TestCase):
     def test_parse(self):
         """
-        Test the parse method directly (not implicitly), thus instead of component("foo"), 
+        Test the parse method directly (not implicitly), thus instead of component("foo"),
         set raw_data explicitly and call parse manually.
         Checks that prepare_each is called using the raw_data value
-        Checks that each is called with the return value of prepare_each 
+        Checks that each is called with the return value of prepare_each
         """
         component = Users(Mock())
         component.raw_data = ["foo"]
@@ -125,8 +136,8 @@ class UsersTestCase(TestCase):
         """
         Check what data is prepared by prepare_each function
         Here it tests passing a string and fills in any blank expected keys.
-        return_value="domain" is because: here we are mocking the entire 
-        data function and always returns domain, so that we can know that 
+        return_value="domain" is because: here we are mocking the entire
+        data function and always returns domain, so that we can know that
         the email data value will be and so that we can check that the data()
         method is being used to get this value.
         """
@@ -539,113 +550,113 @@ class WorkflowsTestCase(TestCase):
 class CollectionsTestCase(TestCase):
     def setUp(self):
         self.user = UserFactory(username="user1")
-        self.wf1 = Workflow.objects.create(name="Workflow 1")
-        self.version = PageVersionFactory()
-        self.page1 = self.version.content.page
-        self.version2 = PageVersionFactory()
-        self.page2 = self.version2.content.page
-        self.bootstrap = Mock(
-            users={"user1": self.user},
-            workflows={"wf1": self.wf1},
-            pages={"page1": self.page1, "page2": self.page2},
+        self.wf1 = Workflow.objects.create()
+
+    def _get_collections_obj(self, pages=None):
+        """Helper method to set up the Collections object instance"""
+        if not pages:
+            pages = {
+                "page1": PageContentWithVersionFactory().page,
+                "page2": PageContentWithVersionFactory().page,
+            }
+        bootstrap = Mock(
+            users={"user1": self.user}, workflows={"wf1": self.wf1}, pages=pages
         )
-        self.component = Collections(self.bootstrap)
-
-    def test_parse_generates_collection(self):
-        """
-        Test that parsing is able to call the Collection.get_or_create method
-        """
-        component = self.component
+        component = Collections(bootstrap)
         component.raw_data = {
             "collection1": {
-                "pages": ["page1", "page2"],
+                "pages": pages.keys(),
                 "name": "Collection 1",
                 "user": "user1",
                 "workflow": "wf1",
             }
         }
+        return component
 
-        with patch.object(component, "get_or_create") as get_or_create:
-            component.parse()
-            get_or_create.assert_called_once_with(
-                {"workflow": self.wf1, "name": "Collection 1", "author": self.user}
-            )
+    @freeze_time()
+    def test_parse_creates_collection_in_db(self):
+        """If the ModerationCollection doesn't exist, a new instance
+        should be created in the db"""
+        component = self._get_collections_obj()
 
-    def test_parse_stores_collection(self):
-        """
-        Test that parsing is able to call the Collection.get_or_create method
-        """
-        component = self.component
-        component.raw_data = {
-            "collection1": {
-                "pages": ["page1"],
-                "name": "Collection 1",
-                "user": "user1",
-                "workflow": "wf1",
-            }
-        }
-        with patch.object(component, "get_or_create") as get_or_create:
-            component.parse()
-            collection_data = {
-                "author": self.user,
-                "workflow": self.wf1,
-                "name": "Collection 1",
-            }
-            self.assertEqual(
-                component.data["collection1"], get_or_create(collection_data)
-            )
-
-    def test_get_or_create(self):
-        # test add
-        collection_data = {
-            "author": self.user,
-            "workflow": self.wf1,
-            "name": "Collection 1",
-        }
-        collection = self.component.get_or_create(collection_data)
-        self.assertEqual(collection.id, 1)
-        collection_data2 = {
-            "author": self.user,
-            "workflow": self.wf1,
-            "name": "Collection 2",
-        }
-        collection2 = self.component.get_or_create(collection_data2)
-        self.assertEqual(collection2.id, 2)
-
-        # test get
-        collection3 = self.component.get_or_create(collection_data)
-        self.assertEqual(collection.id, 1)
-
-    def test_add_version(self):
-        """
-        Test that adding a version to a collection creates 
-        a moderation request which references that version
-        """
-        collection_data = {
-            "author": self.user,
-            "workflow": self.wf1,
-            "name": "Collection 1",
-        }
-        collection = self.component.get_or_create(collection_data)
-        version = self.component.add_version(collection, self.version)
-        moderation_request = collection.moderation_requests.first()
-        stored_version = moderation_request.version
-        # check the stored version
-        self.assertEqual(self.version, stored_version)
-        # check the stored content
-        self.assertEqual(moderation_request.version.content, self.version.content)
-
-    def test_integration(self):
-        component = self.component
-        component.raw_data = {
-            "collection1": {
-                "pages": ["page1"],
-                "name": "Collection 1",
-                "user": "user1",
-                "workflow": "wf1",
-            }
-        }
         component.parse()
-        self.assertEqual(ModerationCollection.objects.count(), 1)
-        collection = component.data["collection1"]
+
+        collection = ModerationCollection.objects.get()
         self.assertEqual(collection.name, "Collection 1")
+        self.assertEqual(collection.author, self.user)
+        self.assertEqual(collection.workflow, self.wf1)
+        self.assertEqual(collection.status, COLLECTING)
+        self.assertEqual(collection.date_created, now())
+        self.assertEqual(collection.date_modified, now())
+
+    def test_parse_does_not_create_collection_if_already_exists(self):
+        """If a ModerationCollection with that name exists, it should not change"""
+        with freeze_time("2010-10-10"):
+            existing_collection = ModerationCollectionFactory(
+                name="Collection 1", status=IN_REVIEW
+            )
+        component = self._get_collections_obj()
+
+        component.parse()
+
+        collection = ModerationCollection.objects.get()
+        self.assertEqual(collection.pk, existing_collection.pk)
+        self.assertEqual(collection.author, existing_collection.author)
+        self.assertEqual(collection.workflow, existing_collection.workflow)
+        self.assertEqual(collection.status, existing_collection.status)
+        self.assertEqual(collection.date_created, existing_collection.date_created)
+        self.assertEqual(collection.date_modified, existing_collection.date_modified)
+
+    @freeze_time()
+    def test_parse_adds_moderation_request(self):
+        """If a ModerationCollection with that name doesn't exist, create
+        moderation requests from the specified pages."""
+        with freeze_time("2010-10-10"):
+            # The version on this page is old
+            page = PageContentWithVersionFactory(version__state=ARCHIVED).page
+        version = PageVersionFactory(content__page=page)  # newer version
+        component = self._get_collections_obj(pages={"page1": page})
+
+        component.parse()
+
+        request = ModerationRequest.objects.get()  # newly created request
+        self.assertEqual(request.collection.name, "Collection 1")
+        self.assertEqual(request.version, version)
+        self.assertEqual(request.author, self.user)
+        # It appears the language field is not currently used by
+        # moderation, hence probably why this is left empty
+        self.assertEqual(request.language, "")
+        self.assertTrue(request.is_active)
+        # TODO: Should this default to the date of the import?
+        self.assertEqual(request.date_sent, now())
+
+    def test_parse_does_not_add_moderation_request_if_collection_already_exists(self):
+        """If a ModerationCollection with that name exists, do not add any
+        moderation requests to it."""
+        ModerationCollectionFactory(name="Collection 1")
+        page = PageContentWithVersionFactory().page
+        component = self._get_collections_obj(pages={"page1": page})
+
+        component.parse()
+
+        self.assertEqual(ModerationRequest.objects.count(), 0)
+
+    def test_parse_adds_collection_to_data(self):
+        """If the ModerationCollection does not exist, it should be
+        assigned to the data dict."""
+        component = self._get_collections_obj()
+
+        component.parse()
+
+        collection = ModerationCollection.objects.get()  # newly created collection
+        self.assertDictEqual(component.data, {"collection1": collection})
+
+    def test_parse_adds_collection_to_data_if_collection_already_exists(self):
+        """If the ModerationCollection object already exists, it should be
+        assigned to the data dict the same way as newly created objects."""
+        existing_collection = ModerationCollectionFactory(name="Collection 1")
+        component = self._get_collections_obj()
+
+        component.parse()
+
+        self.assertDictEqual(component.data, {"collection1": existing_collection})
