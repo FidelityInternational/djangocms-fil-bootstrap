@@ -30,7 +30,7 @@ class Workflows(Component):
 
     def workflow(self, name, data, roles):
         steps = data.pop("steps", [])
-        workflow = Workflow.objects.create(**data)
+        workflow, created = Workflow.objects.get_or_create(**data)
         for step in steps:
             step["role"] = roles[step["role"]]
             workflow.steps.create(**step)
