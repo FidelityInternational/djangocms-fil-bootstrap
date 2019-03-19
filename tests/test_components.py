@@ -520,7 +520,7 @@ class WorkflowsTestCase(TestCase):
         self.assertEqual(step.is_required, True)
         self.assertEqual(step.order, 1)
 
-    def test_workflows(self):
+    def test_parse_creates_workflows_in_db(self):
         roles = Mock()
         component = Workflows(Mock())
         component.raw_data = {
@@ -536,6 +536,33 @@ class WorkflowsTestCase(TestCase):
             ],
             any_order=True,
         )
+
+    def test_parse_does_not_create_workflow_if_already_exists(self):
+        """
+        If the collected data already contains a given workflow, then it should be SELECTed, not CREATEd
+        """
+        user = UserFactory()
+        role = Role.objects.create(name="Role 1", user=user)
+        component = Workflows(Mock())
+        component.workflow(
+            "wf1",
+            {
+                "name": "Workflow 1",
+                "is_default": True,
+                "steps": [{"role": "role1", "is_required": True, "order": 1}],
+            },
+            {"role1": role},
+        )
+        component.workflow(
+            "wf2",
+            {
+                "name": "Workflow 1",
+                "is_default": True,
+                "steps": [{"role": "role1", "is_required": True, "order": 1}],
+            },
+            {"role1": role},
+        )
+        self.assertNotIn("wf2", component.data)
 
     def test_parse(self):
         component = Workflows(Mock())
