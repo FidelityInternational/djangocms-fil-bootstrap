@@ -1,6 +1,5 @@
 from unittest.mock import Mock, call, patch
 
-from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
 from django.utils.timezone import now
 
@@ -32,7 +31,6 @@ from djangocms_fil_bootstrap.test_utils.factories import (
     RoleFactory,
     UserFactory,
     WorkflowFactory,
-    WorkflowStepFactory,
 )
 from djangocms_fil_bootstrap.utils import get_version
 from djangocms_versioning.constants import ARCHIVED, DRAFT, PUBLISHED
