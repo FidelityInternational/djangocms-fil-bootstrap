@@ -128,6 +128,8 @@ class RoleFactory(factory.django.DjangoModelFactory):
 
 class WorkflowFactory(factory.django.DjangoModelFactory):
     name = FuzzyText(length=12)
+    identifier = FuzzyText(length=12)
+    compliance_number_backend = FuzzyText(length=12)
 
     class Meta:
         model = Workflow
