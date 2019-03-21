@@ -1,5 +1,6 @@
 from unittest.mock import Mock, call, patch
 
+from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
 from django.utils.timezone import now
 
@@ -29,6 +30,8 @@ from djangocms_fil_bootstrap.test_utils.factories import (
     PageVersionFactory,
     PlaceholderFactory,
     UserFactory,
+    WorkflowFactory,
+    WorkflowStepFactory,
 )
 from djangocms_fil_bootstrap.utils import get_version
 from djangocms_versioning.constants import ARCHIVED, DRAFT, PUBLISHED
@@ -498,7 +501,7 @@ class WorkflowsTestCase(TestCase):
         role.assert_has_calls([call(role1), call(role2), call(role3)], any_order=True)
         self.assertEqual(result, {"role1": role1, "role2": role2, "role3": role3})
 
-    def test_workflow(self):
+    def test_parse_workflow(self):
         user = UserFactory()
         role = Role.objects.create(name="Role 1", user=user)
         component = Workflows(Mock())
@@ -537,13 +540,16 @@ class WorkflowsTestCase(TestCase):
             any_order=True,
         )
 
-    def test_parse_does_not_create_workflow_if_already_exists(self):
+    def test_parse_does_not_create_workflow_if_already_exists_in_db(self):
         """
         If the collected data already contains a given workflow, then it should be SELECTed, not CREATEd
         """
         user = UserFactory()
         role = Role.objects.create(name="Role 1", user=user)
         component = Workflows(Mock())
+        workflow = WorkflowFactory(name="Workflow 1", is_default=True)
+        step = WorkflowStepFactory(workflow=workflow, role=role)
+        workflow.steps.add(step)
         component.workflow(
             "wf1",
             {
@@ -562,7 +568,54 @@ class WorkflowsTestCase(TestCase):
             },
             {"role1": role},
         )
-        self.assertNotIn("wf2", component.data)
+
+        multiple_returned = False
+        try:
+            workflow = Workflow.objects.get()
+        except MultipleObjectsReturned as e:
+            multiple_returned = True
+        
+        self.assertFalse(multiple_returned)
+        self.assertEqual(workflow.name, "Workflow 1")
+        self.assertEqual(workflow.steps.first().role, role)
+        self.assertIn("wf1", component.data)
+
+    def test_parse_does_not_create_workflow_if_already_exists_in_json(self):
+        """
+        If the collected data already contains a given workflow, then it should be SELECTed, not CREATEd
+        """
+        user = UserFactory()
+        role = Role.objects.create(name="Role 1", user=user)
+        role2 = Role.objects.create(name="Role 2", user=user)
+        component = Workflows(Mock())
+        component.workflow(
+            "wf1",
+            {
+                "name": "Workflow 1",
+                "is_default": True,
+                "steps": [{"role": "role1", "is_required": True, "order": 1}],
+            },
+            {"role1": role},
+        )
+        component.workflow(
+            "wf2",
+            {
+                "name": "Workflow 1",
+                "is_default": True,
+                "steps": [{"role": "role1", "is_required": True, "order": 1}],
+            },
+            {"role1": role2},
+        )
+        multiple_returned = False
+        try:
+            workflow = Workflow.objects.get()
+        except MultipleObjectsReturned as e:
+            multiple_returned = True
+        
+        self.assertFalse(multiple_returned)
+        self.assertEqual(workflow.name, "Workflow 1")
+        self.assertEqual(workflow.steps.first().role, role)
+        self.assertIn("wf1", component.data)
 
     def test_parse(self):
         component = Workflows(Mock())
