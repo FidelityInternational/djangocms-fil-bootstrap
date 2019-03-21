@@ -7,7 +7,7 @@ from django.contrib.sites.models import Site
 from cms.models import Page, PageContent, Placeholder, TreeNode
 
 import factory
-from djangocms_moderation.models import ModerationCollection, Workflow
+from djangocms_moderation.models import ModerationCollection, Role, Workflow, WorkflowStep
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
 from djangocms_versioning.models import Version
@@ -118,11 +118,30 @@ class PlaceholderFactory(factory.django.DjangoModelFactory):
         model = Placeholder
 
 
+class RoleFactory(factory.django.DjangoModelFactory):
+    name = FuzzyText(length=12)
+    user = factory.SubFactory(UserFactory)
+
+    class Meta:
+        model = Role
+
+
 class WorkflowFactory(factory.django.DjangoModelFactory):
     name = FuzzyText(length=12)
+    identifier = FuzzyText(length=12)
+    compliance_number_backend = FuzzyText(length=12)
 
     class Meta:
         model = Workflow
+
+
+class WorkflowStepFactory(factory.django.DjangoModelFactory):
+    role = factory.SubFactory(RoleFactory)
+    is_required = FuzzyChoice([True, False])
+    order = factory.Sequence(int)
+
+    class Meta:
+        model = WorkflowStep
 
 
 class ModerationCollectionFactory(factory.django.DjangoModelFactory):

@@ -28,7 +28,9 @@ from djangocms_fil_bootstrap.test_utils.factories import (
     PageContentWithVersionFactory,
     PageVersionFactory,
     PlaceholderFactory,
+    RoleFactory,
     UserFactory,
+    WorkflowFactory,
 )
 from djangocms_fil_bootstrap.utils import get_version
 from djangocms_versioning.constants import ARCHIVED, DRAFT, PUBLISHED
@@ -536,6 +538,75 @@ class WorkflowsTestCase(TestCase):
             ],
             any_order=True,
         )
+
+    def test_does_not_create_workflow_if_already_exists_in_db(self):
+        """
+        If the collected data already contains a given workflow, then it should be SELECTed, not INSERTed
+        """
+        existing_workflow = WorkflowFactory(is_default=False)
+        component = Workflows(Mock())
+
+        component.workflow(
+            "wf1",
+            {
+                "name": existing_workflow.name,
+                "is_default": True,
+                "identifier": 'blabla',
+                "requires_compliance_number": True,
+                "compliance_number_backend": 'blabla',
+                "steps": [],
+            },
+            {},
+        )
+
+        workflow = Workflow.objects.get()  # no additional workflow should have been created
+        # No fields should have been updated
+        self.assertEqual(workflow.name, existing_workflow.name)
+        self.assertFalse(workflow.is_default)
+        self.assertEqual(workflow.identifier, existing_workflow.identifier)
+        self.assertFalse(workflow.requires_compliance_number)
+
+    def test_does_not_create_steps_if_workflow_already_exists_in_db(self):
+        role = RoleFactory()
+        existing_workflow = WorkflowFactory(is_default=False)
+        component = Workflows(Mock())
+
+        component.workflow(
+            "wf1",
+            {
+                "name": existing_workflow.name,
+                "is_default": True,
+                "identifier": 'blabla',
+                "requires_compliance_number": True,
+                "compliance_number_backend": 'blabla',
+                "steps": [{"role": "role1", "is_required": True, "order": 1}],
+            },
+            {"role1": role},
+        )
+
+        # No additional workflow should have been created
+        workflow = Workflow.objects.get()
+        # No steps should have been added
+        self.assertEqual(workflow.steps.count(), 0)
+
+    def test_assigns_existing_workflow_to_data(self):
+        existing_workflow = WorkflowFactory(is_default=False)
+        component = Workflows(Mock())
+
+        component.workflow(
+            "wf1",
+            {
+                "name": existing_workflow.name,
+                "is_default": True,
+                "identifier": 'blabla',
+                "requires_compliance_number": True,
+                "compliance_number_backend": 'blabla',
+                "steps": [],
+            },
+            {},
+        )
+        
+        self.assertDictEqual(component.data, {'wf1': existing_workflow})
 
     def test_parse(self):
         component = Workflows(Mock())

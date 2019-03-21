@@ -4,6 +4,7 @@ djangocms_helper
 flake8
 isort
 factory-boy
+freezegun
 djangocms-column
 -e git+git@github.com:FidelityInternational/djangocms-versioning.git#egg=djangocms_versioning
 -e git+git@github.com:FidelityInternational/djangocms-version-locking.git#egg=djangocms_version_locking
