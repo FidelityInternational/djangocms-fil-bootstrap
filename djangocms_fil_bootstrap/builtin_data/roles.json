@@ -30,6 +30,7 @@
             "change_moderationcollection_author": ["can_change_author", "djangocms_moderation", "moderationcollection"],
             "add_moderationcollection": ["add_moderationcollection", "djangocms_moderation", "moderationcollection"],
             "change_moderationcollection": ["change_moderationcollection", "djangocms_moderation", "moderationcollection"],
+            "cancel_moderationcollection": ["cancel_moderationcollection", "djangocms_moderation", "moderationcollection"],
             "add_moderationrequest": ["add_moderationrequest", "djangocms_moderation", "moderationrequest"],
             "change_moderationrequest": ["change_moderationrequest", "djangocms_moderation", "moderationrequest"],
             "add_moderationrequestaction": ["add_moderationrequestaction", "djangocms_moderation", "moderationrequestaction"],
@@ -129,6 +130,7 @@
             "publisher": [
                 "change_moderationcollection_author",
                 "add_moderationcollection",
+                "cancel_moderationcollection",
                 "change_moderationcollection",
                 "add_moderationrequest",
                 "change_moderationrequest",
