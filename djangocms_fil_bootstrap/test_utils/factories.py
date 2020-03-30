@@ -7,10 +7,14 @@ from django.contrib.sites.models import Site
 from cms.models import Page, PageContent, Placeholder, TreeNode
 
 import factory
-from djangocms_moderation.models import ModerationCollection, Role, Workflow, WorkflowStep
-from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
-
+from djangocms_moderation.models import (
+    ModerationCollection,
+    Role,
+    Workflow,
+    WorkflowStep,
+)
 from djangocms_versioning.models import Version
+from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
 
 class GroupFactory(factory.django.DjangoModelFactory):

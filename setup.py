@@ -4,12 +4,11 @@ import djangocms_fil_bootstrap
 
 
 INSTALL_REQUIREMENTS = [
-    "Django>=1.11,<2.2",
+    "Django>=1.11,<3.0",
+    "django-cms",
     "djangocms-column",
-    # 'django-cms>=4.0',
     "factory_boy>=2.11",
 ]
-
 
 setup(
     name="djangocms-fil-bootstrap",
@@ -30,4 +29,7 @@ setup(
     author="Fidelity International",
     url="http://github.com/FidelityInternational/djangocms-fil-bootstrap",
     license="BSD",
+    dependency_links=[
+        "http://github.com/divio/django-cms/tarball/release/4.0.x#egg=django-cms-4.0.0",
+    ]
 )
