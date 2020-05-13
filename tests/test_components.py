@@ -10,6 +10,7 @@ from djangocms_moderation.models import (
     Role,
     Workflow,
 )
+from djangocms_versioning.constants import ARCHIVED, DRAFT, PUBLISHED
 from freezegun import freeze_time
 
 from djangocms_fil_bootstrap.components import (
@@ -21,7 +22,10 @@ from djangocms_fil_bootstrap.components import (
     Workflows,
 )
 from djangocms_fil_bootstrap.components.base import Component
-from djangocms_fil_bootstrap.components.permissions import codename, natural_key
+from djangocms_fil_bootstrap.components.permissions import (
+    codename,
+    natural_key,
+)
 from djangocms_fil_bootstrap.test_utils.factories import (
     GroupFactory,
     ModerationCollectionFactory,
@@ -33,7 +37,6 @@ from djangocms_fil_bootstrap.test_utils.factories import (
     WorkflowFactory,
 )
 from djangocms_fil_bootstrap.utils import get_version
-from djangocms_versioning.constants import ARCHIVED, DRAFT, PUBLISHED
 
 
 class TestComponent(Component):
@@ -605,7 +608,7 @@ class WorkflowsTestCase(TestCase):
             },
             {},
         )
-        
+
         self.assertDictEqual(component.data, {'wf1': existing_workflow})
 
     def test_parse(self):

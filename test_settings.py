@@ -1,3 +1,19 @@
+
+class DisableMigrations(object):
+    """
+    Django-cms disables all migrations when they run their tests.
+    It would be better to not do it. Right now we are forced to disable our
+    migrations because we inherit one of our models from django-cms.
+    The error in question is due to an incompability of sqlite3 and
+    with atomic transactions.
+    """
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return None
+
+
 HELPER_SETTINGS = {
     "TIME_ZONE": "America/Chicago",
     "INSTALLED_APPS": [
@@ -15,6 +31,7 @@ HELPER_SETTINGS = {
         ("fr", "French"),
         ("it", "Italiano"),
     ),
+    "MIGRATION_MODULES": DisableMigrations(),
     "CMS_LANGUAGES": {
         1: [
             {"code": "en", "name": "English", "fallbacks": ["de", "fr"]},

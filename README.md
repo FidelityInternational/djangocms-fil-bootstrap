@@ -7,13 +7,22 @@ Overview
 
 django CMS FIL Bootstrap allows users to load initial set of data into the database.
 It can be used to create user groups, setup permissions and more.
-The idea is that there would be a set of initial data (e.g. Groups and Permissions) that 
+The idea is that there would be a set of initial data (e.g. Groups and Permissions) that
 would be common to all Fidelity Sites that integrate djangocms-moderation.
 
 
 Requirements
 ============
 django CMS FIL Bootstrap requires that you have a django CMS 4.0 (or higher) project already running and set up.
+
+
+Running tests
+=============
+
+Run::
+
+    pip install -r tests/requirements.txt
+    python setup.py test
 
 
 Installation
@@ -44,7 +53,7 @@ Architecture
 
 Addon consists of multiple :class:`djangocms_fil_bootstrap.components.Component` classes.
 Each of these represents a Django model for which to import data.
-Each of these extends the `components/base.py` Component class, which provides data accessors for 
+Each of these extends the `components/base.py` Component class, which provides data accessors for
 each component via magic methods.
 
 This allows you to then data from any key within any component by using: `self.bootstrap.data("other_key")`
@@ -94,7 +103,7 @@ A) Repeat all the dependent data completely in both files
 B) Repeat only the unique identifiers in the later files
 If you wish to accumulate data, then records in later files will still need to be defined but they do not require all the data to be present, providing that your component uses `get_or_create` when generating new records.
 
-Thus, if you intend to run multiple data files in sequence and there is overlap in the data between these files, it is possible to conform to DRY principles *to a degree*. (DRY = Don't Repeat Yourself and here it applies to the codified data in the JSON files). 
+Thus, if you intend to run multiple data files in sequence and there is overlap in the data between these files, it is possible to conform to DRY principles *to a degree*. (DRY = Don't Repeat Yourself and here it applies to the codified data in the JSON files).
 
 This can be useful so that you don't have to replicate changes across multiple files
 
@@ -102,7 +111,7 @@ This can be useful so that you don't have to replicate changes across multiple f
 E.g. Let's say you have two json files to import: `roles.json` and `demo.json`. You may define all the permissions and roles in the first file. Any records which may be required in the second just need their unique identifier property, so that `get_or_create` will execute a SELECT instead of an INSERT.
 
 Note that each root key in your json data file must correspond by name with one of the components, `Component.field_name` attribute.
-And the json data type (i.e. list or object) for a given root key should correspond to the `default_factory` 
+And the json data type (i.e. list or object) for a given root key should correspond to the `default_factory`
 
 Thus in `roles.json` you might have this structure:
 
@@ -134,7 +143,7 @@ Then in `demo.json` you may wish to use that role for generating related data, i
                     "order": 3
                 }
         },
-        
+
 
 Permissions
 ===========
