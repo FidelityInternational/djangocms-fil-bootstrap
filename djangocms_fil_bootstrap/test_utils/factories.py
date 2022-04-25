@@ -14,8 +14,8 @@ from djangocms_moderation.models import (
     WorkflowStep,
 )
 from djangocms_versioning.models import Version
-from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 from factory.django import DjangoModelFactory
+from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
 
 class GroupFactory(DjangoModelFactory):
