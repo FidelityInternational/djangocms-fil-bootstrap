@@ -15,6 +15,7 @@ class DisableMigrations(object):
 
 
 HELPER_SETTINGS = {
+    "SECRET_KEY": "djangocms-fil-bootstrap-tests",
     "TIME_ZONE": "America/Chicago",
     "INSTALLED_APPS": [
         "djangocms_text_ckeditor",
@@ -54,11 +55,12 @@ HELPER_SETTINGS = {
     },
     "PARLER_ENABLE_CACHING": False,
     "LANGUAGE_CODE": "en",
+    "DEFAULT_AUTO_FIELD": "django.db.models.AutoField",
 }
 
 
 def run():
-    from djangocms_helper import runner
+    from app_helper import runner
 
     runner.cms("djangocms_fil_bootstrap", extra_args=[])
 
