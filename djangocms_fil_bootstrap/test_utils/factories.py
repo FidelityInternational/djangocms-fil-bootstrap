@@ -14,15 +14,16 @@ from djangocms_moderation.models import (
     WorkflowStep,
 )
 from djangocms_versioning.models import Version
+from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
 
-class GroupFactory(factory.django.DjangoModelFactory):
+class GroupFactory(DjangoModelFactory):
     class Meta:
         model = Group
 
 
-class UserFactory(factory.django.DjangoModelFactory):
+class UserFactory(DjangoModelFactory):
     username = FuzzyText(length=12)
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
@@ -41,7 +42,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         return manager.create_user(*args, **kwargs)
 
 
-class AbstractVersionFactory(factory.DjangoModelFactory):
+class AbstractVersionFactory(DjangoModelFactory):
     object_id = factory.SelfAttribute("content.id")
     content_type = factory.LazyAttribute(
         lambda o: ContentType.objects.get_for_model(o.content)
@@ -53,7 +54,7 @@ class AbstractVersionFactory(factory.DjangoModelFactory):
         abstract = True
 
 
-class TreeNodeFactory(factory.django.DjangoModelFactory):
+class TreeNodeFactory(DjangoModelFactory):
     site = factory.fuzzy.FuzzyChoice(Site.objects.all())
     depth = 0
     # NOTE: Generating path this way is probably not a good way of
@@ -67,14 +68,14 @@ class TreeNodeFactory(factory.django.DjangoModelFactory):
         model = TreeNode
 
 
-class PageFactory(factory.django.DjangoModelFactory):
+class PageFactory(DjangoModelFactory):
     node = factory.SubFactory(TreeNodeFactory)
 
     class Meta:
         model = Page
 
 
-class PageContentFactory(factory.django.DjangoModelFactory):
+class PageContentFactory(DjangoModelFactory):
     page = factory.SubFactory(PageFactory)
     language = FuzzyChoice(["en", "fr", "it"])
     title = FuzzyText(length=12)
@@ -112,7 +113,7 @@ class PageContentWithVersionFactory(PageContentFactory):
         PageVersionFactory(content=self, **kwargs)
 
 
-class PlaceholderFactory(factory.django.DjangoModelFactory):
+class PlaceholderFactory(DjangoModelFactory):
     default_width = FuzzyInteger(0, 25)
     slot = FuzzyText(length=2, chars=string.digits)
     # NOTE: When using this factory you will probably want to set
@@ -122,7 +123,7 @@ class PlaceholderFactory(factory.django.DjangoModelFactory):
         model = Placeholder
 
 
-class RoleFactory(factory.django.DjangoModelFactory):
+class RoleFactory(DjangoModelFactory):
     name = FuzzyText(length=12)
     user = factory.SubFactory(UserFactory)
 
@@ -130,7 +131,7 @@ class RoleFactory(factory.django.DjangoModelFactory):
         model = Role
 
 
-class WorkflowFactory(factory.django.DjangoModelFactory):
+class WorkflowFactory(DjangoModelFactory):
     name = FuzzyText(length=12)
     identifier = FuzzyText(length=12)
     compliance_number_backend = FuzzyText(length=12)
@@ -139,7 +140,7 @@ class WorkflowFactory(factory.django.DjangoModelFactory):
         model = Workflow
 
 
-class WorkflowStepFactory(factory.django.DjangoModelFactory):
+class WorkflowStepFactory(DjangoModelFactory):
     role = factory.SubFactory(RoleFactory)
     is_required = FuzzyChoice([True, False])
     order = factory.Sequence(int)
@@ -148,7 +149,7 @@ class WorkflowStepFactory(factory.django.DjangoModelFactory):
         model = WorkflowStep
 
 
-class ModerationCollectionFactory(factory.django.DjangoModelFactory):
+class ModerationCollectionFactory(DjangoModelFactory):
     name = FuzzyText(length=12)
     author = factory.SubFactory(UserFactory)
     workflow = factory.SubFactory(WorkflowFactory)

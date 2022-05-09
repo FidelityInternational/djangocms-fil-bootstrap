@@ -8,7 +8,14 @@ def bootstrap(file_):
 
     reseed_random(0)
     from .bootstrapper import Bootstrap
-    from .components import Collections, Groups, Pages, Permissions, Users, Workflows
+    from .components import (
+        Collections,
+        Groups,
+        Pages,
+        Permissions,
+        Users,
+        Workflows,
+    )
 
     bootstrap = Bootstrap(file_)
     bootstrap(Users, Groups, Permissions, Pages, Workflows, Collections)
