@@ -61,7 +61,10 @@ HELPER_SETTINGS = {
 }
 
 if not DJANGO_CMS_4_1:
-    HELPER_SETTINGS['INSTALLED_APPS'].append("djangocms_version_locking")
+    HELPER_SETTINGS['INSTALLED_APPS'].extend([
+        "djangocms_version_locking",
+        "djangocms_alias"
+    ])
 
 
 def run():
