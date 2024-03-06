@@ -122,10 +122,7 @@
                 ["delete_version", "djangocms_versioning", "version"],
                 ["add_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
                 ["change_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
-                ["delete_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
-                ["add_versionlock", "djangocms_version_locking", "versionlock"],
-                ["change_versionlock", "djangocms_version_locking", "versionlock"],
-                ["delete_versionlock", "djangocms_version_locking", "versionlock"]
+                ["delete_pagecontentversion", "djangocms_versioning", "pagecontentversion"]
             ],
             "publisher": [
                 "change_moderationcollection_author",
@@ -195,10 +192,7 @@
                 ["delete_version", "djangocms_versioning", "version"],
                 ["add_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
                 ["change_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
-                ["delete_pagecontentversion", "djangocms_versioning", "pagecontentversion"],
-                ["add_versionlock", "djangocms_version_locking", "versionlock"],
-                ["change_versionlock", "djangocms_version_locking", "versionlock"],
-                ["delete_versionlock", "djangocms_version_locking", "versionlock"]
+                ["delete_pagecontentversion", "djangocms_versioning", "pagecontentversion"]
             ]
         }
     }
