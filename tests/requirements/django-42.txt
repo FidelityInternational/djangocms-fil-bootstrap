@@ -1,0 +1,9 @@
+-r requirements_base.txt
+
+Django>=4.2,<5.0
+
+# Unreleased django-cms 4.1 compatible packages
+https://github.com/django-cms/django-cms/tarball/develop-4#egg=django-cms
+https://github.com/django-cms/djangocms-text-ckeditor/tarball/5.1.5#egg=djangocms-text-ckeditor
+https://github.com/django-cms/djangocms-versioning/tarball/2.0.0#egg=djangocms-versioning
+https://github.com/FidelityInternational/djangocms-moderation/tarball/feature/django-42-compat#egg=djangocms-moderation

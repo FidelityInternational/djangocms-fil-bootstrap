@@ -1,6 +1,11 @@
 -r requirements_base.txt
 
 Django>=3.2,<4.0
+django-admin-sortable2<2
 
 # Unreleased django-cms 4.0 compatible packages
-https://github.com/django-cms/djangocms-moderation/tarball/master#egg=djangocms-moderation
+https://github.com/django-cms/django-cms/tarball/4.0.0#egg=django-cms
+https://github.com/django-cms/djangocms-text-ckeditor/tarball/support/4.0.x#egg=djangocms-text-ckeditor
+https://github.com/django-cms/djangocms-versioning/tarball/1.2.2#egg=djangocms-versioning
+https://github.com/FidelityInternational/djangocms-version-locking/tarball/1.2.0#egg=djangocms-version-locking
+https://github.com/django-cms/djangocms-moderation/tarball/2.1.5#egg=djangocms-moderation

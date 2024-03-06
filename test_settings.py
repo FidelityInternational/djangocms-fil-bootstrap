@@ -1,3 +1,5 @@
+from djangocms_fil_bootstrap.compat import DJANGO_CMS_4_1
+
 
 class DisableMigrations(object):
     """
@@ -22,7 +24,6 @@ HELPER_SETTINGS = {
         "djangocms_column",
         "djangocms_fil_bootstrap",
         "djangocms_versioning",
-        "djangocms_version_locking",
         "djangocms_moderation",
     ],
     "CMS_PERMISSION": True,
@@ -55,8 +56,12 @@ HELPER_SETTINGS = {
     },
     "PARLER_ENABLE_CACHING": False,
     "LANGUAGE_CODE": "en",
+    "CMS_CONFIRM_VERSION4": True,
     "DEFAULT_AUTO_FIELD": "django.db.models.AutoField",
 }
+
+if not DJANGO_CMS_4_1:
+    HELPER_SETTINGS['INSTALLED_APPS'].append("djangocms_version_locking")
 
 
 def run():
