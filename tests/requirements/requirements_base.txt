@@ -6,3 +6,4 @@ factory-boy
 flake8
 freezegun
 isort
+packaging

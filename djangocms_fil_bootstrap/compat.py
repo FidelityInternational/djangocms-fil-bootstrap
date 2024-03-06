@@ -1,5 +1,6 @@
 from cms import __version__ as cms_version
 
+
 try:
     from packaging.version import Version
 except ModuleNotFoundError:
