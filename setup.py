@@ -29,7 +29,4 @@ setup(
     author="Fidelity International",
     url="http://github.com/FidelityInternational/djangocms-fil-bootstrap",
     license="BSD",
-    dependency_links=[
-        "http://github.com/divio/django-cms/tarball/release/4.0.x#egg=django-cms-4.0.0",
-    ]
 )
